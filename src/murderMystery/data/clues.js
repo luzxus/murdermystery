@@ -1,33 +1,65 @@
-// Clue definitions
+// Reworked clue definitions with layered structure aimed at subtle deduction.
+// Each clue has optional deepHint (unlocked by performance or GM), tags for thematic linking,
+// phase for pacing, and misdirection tags to blend with red herrings.
 export const clues = [
   {
     id: 1,
-    title: "Glaset på skrivbordet",
-    description: "Ett halvtomt glas whisky med bittermandellukt. Grönaktigt skimmer i botten.",
-    unlock: "🧪 Cyanidförgiftning - extremt dödligt och snabbverkande. Lukten av bittermandel är karakteristisk. Detta gift är INTE lätt att få tag på. Endast personer med tillgång till kemiska laboratorier eller djup kunskap om toxikologi skulle kunna hantera det säkert. Intressant nog: cyanid användes historiskt av spioner under kalla kriget."
+    phase: 'early',
+    title: 'Whiskyglaset',
+    description: 'Svag bittermandeldoft. Tunn blågrön kristallhinna kvar på insidan av glaset.',
+    unlock: '🧪 Kristallresterna tyder på ett snabbverkande cyanid-derivat som (troligen) framställts experimentellt snarare än köpts färdigt.',
+    deepHint: 'Under UV-ljus framträder oregelbundna kantmönster – rekristallisation avbruten snabbt. Kräver praktisk labbrutin (uppfinning / toxikologi).',
+    tags: ['gift', 'kemi', 'kristaller'],
+    misdirectionTags: ['akademiskt', 'uppfinnare'],
+    suspicionWeight: { primary: 6, secondary: 4 }, // Arabella primärt, Professor sekundärt
+    unlockCondition: 'solve_challenge_1' // symbolic key (can be auto when challenge 1 solved)
   },
   {
     id: 2,
-    title: "Tidpunkten för mordet",
-    description: "Lord dog exakt kl 22:15 enligt läkaren - 15 minuter efter att middagen avslutades.",
-    unlock: "⏰ Mördaren måste ha haft tillgång till Lords drink UNDER eller direkt EFTER middagen. Alla var närvarande, men vem hade möjlighet att vara ensam med glaset? Butler Jenkins serverade drinken kl 22:00 - någon måste ha hällt i giftet mellan 22:00-22:15."
+    phase: 'early',
+    title: 'Tidsfönstret',
+    description: '22:00 servering. 22:07 ett kort metalliskt kling från biblioteket. 22:15 kroppen hittas.',
+    unlock: '⏰ Ljudet kan vara ett litet metallföremål som tappats – för litet för möbelbeslag. Någon var där inne kort utan att dra uppmärksamhet.',
+    deepHint: 'Ett knappt synligt metallspån vid mattkanten – kan komma från precisionsverktyg, anteckningsklämma eller manschettdetalj.',
+    tags: ['tid', 'mekanik', 'metall'],
+    misdirectionTags: ['detektiv', 'professor', 'industri'],
+    suspicionWeight: { primary: 5, secondary: 3 },
+    unlockCondition: 'challenge_progress_>=2'
   },
   {
     id: 3,
-    title: "Det hemliga brevet",
-    description: "I Lords jackficka: 'Din hemlighet dör med dig om du inte betalar. - En vän'",
-    unlock: "💰 Lord Sebastian utpressade någon. Brevet är daterat för tre dagar sedan. Pappret är av dyr kvalitet - avsändaren är ingen vanlig person. Handstilen är elegant men nervös. Någon av gästerna hade ett mörkt förflutet som Lord kände till. Frågan är: vems hemlighet var värd ett mord?"
+    phase: 'mid',
+    title: 'Brevet',
+    description: 'Brev i fickan: “Du stal något som definierar MIG. Återlämna det – annars slutar dina intriger.”',
+    unlock: '💰 Formuleringen tyder på identitet knuten till skapande / intellektuellt ägarskap (ritningar, forskning eller ekonomisk konstruktion).',
+    deepHint: 'Baksidan visar fem svaga parallella intryck – som från ritbrädans linjering eller mekanisk skissplatta.',
+    tags: ['ägarskap', 'ritning', 'patent'],
+    misdirectionTags: ['professor', 'ekonomi'],
+    suspicionWeight: { primary: 7, secondary: 4 },
+    unlockCondition: 'solve_challenge_2_fast'
   },
   {
     id: 4,
-    title: "Bibliotekets ordning",
-    description: "Biblioteket är perfekt ordnat utom EN bokhylla - böcker har flyttats nyligen, damm saknas.",
-    unlock: "📚 Någon letade efter något i biblioteket. Flera böcker om kemi, toxikologi och forensik har senast blivit upplockade. Men också böcker om patentlagar och ekonomiska brott. Vad sökte mördaren? Bevis? Eller information om hur man genomför det perfekta mordet?"
+    phase: 'mid',
+    title: 'Hyllsektionen',
+    description: 'Endast en sektion oordnad: “Toxikologins Fundament”, “Patenträtt 1900–1930”, “Kinetiska Mekanismer”, “Ekonomiska Oegentligheter i Industrin”.',
+    unlock: '📚 Kombinationen av toxikologi + mekanik + patent antyder överlapp av kemisk och uppfinningsrelaterad agenda.',
+    deepHint: 'Ett cirkulärt blekt avtryck (som från varm liten metallcylinder) på hyllkant – kan vara spetsigt verktyg / lödkolvsliknande.',
+    tags: ['kemi', 'patent', 'mekanik', 'toxikologi'],
+    misdirectionTags: ['professor', 'industri', 'juridik'],
+    suspicionWeight: { primary: 6, secondary: 5 },
+    unlockCondition: 'challenge_progress_>=4'
   },
   {
     id: 5,
-    title: "Lords sista anteckning",
-    description: "Anteckningsbok öppen: 'De tror alla att jag är dum. Men jag vet vad de döljer. Ikväll konfronterar jag...' - resten är suddigt.",
-    unlock: "✍️ Lord visste att någon hade en farlig hemlighet. Han planerade att konfrontera personen samma kväll. Det sista ordet är oläsligt men börjar på 'D' eller 'P'. Lord var inte rädd - han underskattade faran. Vem kände sig så hotad att mord blev enda utvägen?"
+    phase: 'late',
+    title: 'Sista anteckningen',
+    description: 'Anteckningsbok: “De tror jag bara samlar. Men jag vet: den sanna faran är den som väcker stum materia … Ikväll kräver jag gnistan tillbaka.” Delar är utsmetade.',
+    unlock: '✍️ Formulering antyder skaparkraft – någon som bygger/konstruerar. Kan feltolkas som teoretiker eller uppfinnare.',
+    deepHint: 'Första bokstaven i fem rader (om man re-konstruerar layout) bildar A R A B E – sista bokstaven brännmärkt/förstörd.',
+    tags: ['kod', 'akrostik', 'skapande'],
+    misdirectionTags: ['professor', 'mystik'],
+    suspicionWeight: { primary: 9, secondary: 2 },
+    unlockCondition: 'all_previous_unlocked'
   }
 ];

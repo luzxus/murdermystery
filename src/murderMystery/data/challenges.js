@@ -47,8 +47,8 @@ export const challenges = [
   {
     id: 4,
     title: "Skuggorna talar",
-    description: "En bild hittades på Lords dator - fotograferad av säkerhetskameran precis innan mordet. Lord noterade i marginalen: 'Ser ni det som inte borde vara där?' Studera bilden mycket noga.",
-    puzzle: "🖼️ [Visa bilden av laboratoriet med grön flaska och rök - säkerhetskamera-stil med tidsstämpel]\n\nLords anteckning bredvid bilden:\n'De lämnar alltid spår. Titta där ögat inte naturligt söker sig. Det omöjliga avslöjar sanningen.'",
+    description: "En säkerhetskamera-bild återfanns. Lord skrev: 'Ser ni det som inte borde vara där?' Studera allt – även tidsstämpeln.",
+    puzzle: "Lords anteckning: 'De lämnar alltid spår. Titta där ögat inte naturligt söker sig. Det omöjliga avslöjar sanningen.'",
     hint: "Lord pratade ofta i koder. 'Det omöjliga' - finns det något i bilden som är fysiskt omöjligt? Inte bara vad man ser, utan VAD MAN LÄSER. Även det mest vardagliga kan dölja ett budskap...",
     answer: "VÄN",
     acceptedAnswers: ["VÄN", "VAN", "VÄNNEN", "MINVÄN", "MIN VÄN", "MINVAN", "MIN VAN"],
@@ -56,19 +56,20 @@ export const challenges = [
     type: "visual",
     timeLimit: 12,
     difficulty: "Mycket svår",
-    solution: "I bildens säkerhetskamera-stämpel: 22/28/14. Månad 28 existerar inte = omöjligt! Kod: V(22) Ä(28) N(14) i alfabetet = VÄN"
+    solution: "I bildens säkerhetskamera-stämpel: 22/28/14. Månad 28 existerar inte = omöjligt! Kod: V(22) Ä(28) N(14) i alfabetet = VÄN",
+    image: "/media/images/flaskv1.png"
   },
   {
     id: 5,
-    title: "Slutekvationen",
-    description: "Bokstäver i MORDAREN plus antal ledtrådar = ?",
-    puzzle: "M-O-R-D-A-R-E-N (8) + Ledtrådar (5) = ?",
-    hint: "8 + 5 = ?",
-    answer: "13",
-    acceptedAnswers: ["13", "TRETTON"],
-    instruction: "Skriv summan",
-    type: "logic",
-    timeLimit: 3,
-    difficulty: "Lätt"
+    title: "Identitetskondenseringen",
+    description: "Ni måste nu korsa social information. Endast genom att jämföra hemligheter, roller och motiv kan ni destillera den 'skapande kraft' Lord syftade på i sin sista anteckning.",
+    puzzle: "Ledtrådar att sammanfoga:\n1. En gäst vars karriär hänger på intellektuell prestige (plagiat-risk).\n2. En gäst vars skapelse förändrar något materiellt (mekanik + kemi).\n3. En gäst vars hemlighet är en moralisk katastrof från det förflutna.\n4. En gäst vars förlust är självförvållad genom last.\n5. En gäst som inte är den de säger sig vara.\n\nInstruktion: Identifiera vilka av dessa fem som direkt kräver aktivt skapande + teknisk förståelse i NUTID – inte dåtid, inte passiv förvaltning, inte destruktion. Kombinera därefter begreppet med vad Lord skrev om 'väcker stum materia' och destillera till EN roll / arketyp. Svara med rollens kärnbenämning – ej namn.\n\n(Hint kan begäras men kostar tid.)",
+    hint: "Endast en av de misstänkta förenar både upprepad praktisk mekanisk manipulation och kemisk kompetens i nuet – inte teoretisk, inte rent ekonomisk, inte historiskt dold skuld.",
+    answer: "UPPFINNAREN",
+    acceptedAnswers: ["UPPFINNAREN", "UPPFINNARE", "UPPFINNARINNA", "DR ARABELLA", "ARABELLA", "UPPFINNARENARABELLA"],
+    instruction: "Vad är den destillerade rollen? (ett ord eller fras)",
+    type: "social",
+    timeLimit: 9,
+    difficulty: "Svår"
   }
 ];

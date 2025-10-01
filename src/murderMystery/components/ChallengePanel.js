@@ -44,6 +44,18 @@ export function ChallengePanel({
           <pre className="whitespace-pre-wrap">{challenge.puzzle}</pre>
         </div>
 
+        {challenge.image && (
+          <div className="mb-4">
+            <img
+              src={challenge.image}
+              alt={challenge.title}
+              className="rounded-lg border border-white/10 shadow shadow-black/40 mx-auto max-h-80 object-contain"
+              loading="lazy"
+            />
+            <p className="text-xs text-center text-slate-400 mt-2">Analysera bilden noggrant – även detaljer i kanter / metadata.</p>
+          </div>
+        )}
+
         {feedback && (
           <div className={`p-4 rounded-lg mb-4 ${
             feedback.type === 'success' ? 'bg-green-900/50 text-green-200' : 'bg-red-900/50 text-red-200'
@@ -103,10 +115,27 @@ export function CluesList({ clues, unlockedClues }) {
               <h3 className="font-bold text-white">{clue.title}</h3>
               {unlockedClues.includes(clue.id) ? <Unlock className="w-5 h-5 text-green-400" /> : <Lock className="w-5 h-5 text-gray-500" />}
             </div>
-            <p className="text-gray-300 text-sm mb-3">{clue.description}</p>
-            {unlockedClues.includes(clue.id) && (
-              <div className="bg-black/40 p-3 rounded-lg">
-                <p className="text-green-300 text-sm">{clue.unlock}</p>
+            {unlockedClues.includes(clue.id) ? (
+              <>
+                <p className="text-gray-300 text-sm mb-3">{clue.description}</p>
+                {clue.unlock && (
+                  <div className="bg-black/40 p-3 rounded-lg mb-2">
+                    <p className="text-green-300 text-sm">{clue.unlock}</p>
+                  </div>
+                )}
+                {clue.deepHint && (
+                  <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700/40 text-purple-200 text-xs italic">
+                    Fördjupad analys möjlig: <span className="opacity-70">{clue.deepHint}</span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="space-y-2">
+                <div className="h-4 w-3/4 bg-slate-600/30 rounded blur-[1px]" />
+                <div className="h-3 w-2/3 bg-slate-600/20 rounded blur-[1px]" />
+                <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500 flex items-center gap-1">
+                  <Lock className="w-3 h-3" /> Lås upp genom att lösa nästa utmaning
+                </p>
               </div>
             )}
           </div>

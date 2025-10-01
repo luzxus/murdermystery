@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { personas } from './data/personas';
 import { challenges } from './data/challenges';
 import { clues } from './data/clues';
@@ -12,6 +12,8 @@ import { IntroScreen } from './components/IntroScreen';
 import { GameScreen } from './components/GameScreen';
 import { SecretsScreen } from './components/SecretsScreen';
 import { RevealScreen } from './components/RevealScreen';
+import { AmbientObservations } from './components/AmbientObservations';
+import { useRedHerrings } from './hooks/useRedHerrings';
 
 export function MurderMysteryApp() {
   const [screen, setScreen] = useState(Screens.SETUP);
@@ -31,6 +33,12 @@ export function MurderMysteryApp() {
   const [votes, setVotes] = useState({});
   const [votingInProgress, setVotingInProgress] = useState(false);
   const [showSecretsRound, setShowSecretsRound] = useState(false);
+  // Suspicion tracking (placeholder simple heuristic)
+  const suspicionMapRef = useRef({}); // characterId -> score
+  const lastClueTagsRef = useRef([]);
+
+  // Force murderer to be Dr Arabella (id 6) for redesigned narrative
+  // If she isn't in selected players (few players), fallback to random.
 
   // Timer effect
   useEffect(() => {
@@ -54,16 +62,41 @@ export function MurderMysteryApp() {
   const distributeRoles = () => {
     const selected = shuffle(personas).slice(0, playerCount);
     setSelectedPlayers(selected);
-    setMurderer(pickRandom(selected));
+    const arabella = selected.find(p => p.id === 6);
+    setMurderer(arabella || pickRandom(selected));
     setScreen(Screens.CHARACTERS);
   };
+
+  // Derive phase from challenge progression
+  const getPhase = () => {
+    const ratio = currentChallenge / (challenges.length - 1);
+    if (ratio < 0.34) return 'early';
+    if (ratio < 0.75) return 'mid';
+    return 'late';
+  };
+
+  const getLastClueTags = () => lastClueTagsRef.current;
+  const getSuspicionMap = () => suspicionMapRef.current;
+
+  const { observations, registerRealClue, maybeInject } = useRedHerrings({
+    murdererId: 6,
+    getPhase,
+    getLastClueTags,
+    getSuspicionMap,
+    maxRatio: 0.55
+  });
 
   const checkAnswer = () => {
     const challenge = challenges[currentChallenge];
     if (isAcceptedAnswer(userAnswer, challenge.acceptedAnswers)) {
       setTimerActive(false);
       setFeedback({ type: 'success', message: 'Rätt! Ledtråd upplåst!' });
-      setUnlockedClues([...unlockedClues, challenge.id]);
+      setUnlockedClues(prev => {
+        const next = [...prev, challenge.id];
+        // Register clue opened for red herring ratio
+        registerRealClue();
+        return next;
+      });
 
       setTimeout(() => {
         setUserAnswer('');
@@ -79,6 +112,8 @@ export function MurderMysteryApp() {
     } else {
       setFeedback({ type: 'error', message: 'Fel svar!' });
       setTimeout(() => setFeedback(null), 3000);
+      // Failed answer → small chance injection
+      if (Math.random() < 0.35) maybeInject('challengeFail');
     }
   };
 
@@ -132,6 +167,18 @@ export function MurderMysteryApp() {
 
   const activePlayers = selectedPlayers.filter(p => !eliminatedPlayers.includes(p.id));
 
+  // When a clue becomes available (unlocked), capture its tags for red herring context
+  useEffect(() => {
+    if (!unlockedClues.length) return;
+    const lastId = unlockedClues[unlockedClues.length - 1];
+    const clue = clues.find(c => c.id === lastId);
+    if (clue) {
+      lastClueTagsRef.current = clue.tags || [];
+      // Attempt injection after real clue sometimes
+      if (Math.random() < 0.4) maybeInject('afterClue');
+    }
+  }, [unlockedClues, maybeInject]);
+
   // Render
   if (screen === Screens.SETUP) {
     return (
@@ -176,30 +223,35 @@ export function MurderMysteryApp() {
 
   if (screen === Screens.GAME) {
     return (
-      <GameScreen
-        challenge={challenges[currentChallenge]}
-        currentIndex={currentChallenge}
-        totalChallenges={challenges.length}
-        userAnswer={userAnswer}
-        setUserAnswer={setUserAnswer}
-        checkAnswer={checkAnswer}
-        showHint={showHint}
-        setShowHint={setShowHint}
-        feedback={feedback}
-        timeRemaining={timeRemaining}
-        unlockedClues={unlockedClues}
-        clues={clues}
-        startVoting={startVoting}
-        showVotingPanel={showVotingPanel}
-        onCancelVoting={() => { setShowVotingPanel(false); setVotingInProgress(false); setVotes({}); }}
-        onFinishVoting={finishVoting}
-        votes={votes}
-        castVote={castVote}
-        activePlayers={activePlayers}
-        selectedPlayers={selectedPlayers}
-        eliminatedPlayers={eliminatedPlayers}
-        votingInProgress={votingInProgress}
-      />
+      <>
+        <GameScreen
+          challenge={challenges[currentChallenge]}
+          currentIndex={currentChallenge}
+          totalChallenges={challenges.length}
+          userAnswer={userAnswer}
+          setUserAnswer={setUserAnswer}
+          checkAnswer={checkAnswer}
+          showHint={showHint}
+          setShowHint={setShowHint}
+          feedback={feedback}
+          timeRemaining={timeRemaining}
+          unlockedClues={unlockedClues}
+          clues={clues}
+          startVoting={startVoting}
+          showVotingPanel={showVotingPanel}
+          onCancelVoting={() => { setShowVotingPanel(false); setVotingInProgress(false); setVotes({}); }}
+          onFinishVoting={finishVoting}
+          votes={votes}
+          castVote={castVote}
+          activePlayers={activePlayers}
+          selectedPlayers={selectedPlayers}
+          eliminatedPlayers={eliminatedPlayers}
+          votingInProgress={votingInProgress}
+        />
+        <div className="max-w-6xl mx-auto px-4">
+          <AmbientObservations items={observations} />
+        </div>
+      </>
     );
   }
 
