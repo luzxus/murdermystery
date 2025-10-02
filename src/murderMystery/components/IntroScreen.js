@@ -1,9 +1,13 @@
 import React from 'react';
 import { Skull, AlertCircle } from 'lucide-react';
+import { MANOR_STILL } from '../constants';
 
 export function IntroScreen({ onStartGame }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+    <div
+      className="min-h-screen relative bg-gradient-to-br from-slate-900/85 via-purple-900/70 to-slate-900/85 p-8"
+      style={{ backgroundImage: `url(${MANOR_STILL})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
+    >
       <div className="max-w-3xl mx-auto">
         <div className="bg-white/10 rounded-2xl p-8 border border-white/20">
           <Skull className="w-20 h-20 mx-auto mb-6 text-red-500" />

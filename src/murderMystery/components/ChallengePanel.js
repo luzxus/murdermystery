@@ -13,8 +13,16 @@ export function ChallengePanel({
   timeRemaining,
   activePlayersCount,
   totalPlayers,
-  eliminatedCount
+  eliminatedCount,
+  hintSuppressedUntil = 0,
+  submitDisabledUntil = 0,
+  penaltyTick
 }) {
+  const now = Date.now();
+  const hintLocked = hintSuppressedUntil > now;
+  const submitLocked = submitDisabledUntil > now;
+  const hintCountdown = hintLocked ? Math.ceil((hintSuppressedUntil - now)/1000) : 0;
+  const submitCountdown = submitLocked ? Math.ceil((submitDisabledUntil - now)/1000) : 0;
   return (
     <div className="min-h-screen">
       <div className="mb-8 text-center">
@@ -73,33 +81,38 @@ export function ChallengePanel({
             placeholder="Ditt svar..."
             className="w-full bg-black/40 text-white border border-purple-500/50 rounded-lg px-4 py-3"
           />
+          <button
+            onClick={!submitLocked ? onSubmit : undefined}
+            disabled={submitLocked}
+            className={`w-full py-3 rounded-lg font-bold transition-transform ${submitLocked
+              ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:scale-105'}`}
+          >
+            {submitLocked ? `Låst (${submitCountdown}s)` : 'Kontrollera svar'}
+          </button>
 
-            <button
-              onClick={onSubmit}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-bold hover:scale-105 transition-transform"
-            >
-              Kontrollera svar
-            </button>
+          <button
+            onClick={() => !hintLocked && setShowHint(!showHint)}
+            disabled={hintLocked}
+            className={`w-full py-2 rounded-lg text-sm ${hintLocked
+              ? 'bg-yellow-900/20 text-yellow-700 cursor-not-allowed border border-yellow-700/30'
+              : 'bg-yellow-900/50 text-yellow-200'}`}
+          >
+            {hintLocked ? `Hint avstängd (${hintCountdown}s)` : (showHint ? 'Dölj hint' : 'Visa hint')}
+          </button>
 
-            <button
-              onClick={() => setShowHint(!showHint)}
-              className="w-full bg-yellow-900/50 text-yellow-200 py-2 rounded-lg text-sm"
-            >
-              {showHint ? 'Dölj hint' : 'Visa hint'}
-            </button>
-
-            {showHint && (
-              <div className="bg-yellow-900/30 p-4 rounded-lg">
-                <p className="text-yellow-200 text-sm">{challenge.hint}</p>
-              </div>
-            )}
+          {showHint && !hintLocked && (
+            <div className="bg-yellow-900/30 p-4 rounded-lg">
+              <p className="text-yellow-200 text-sm">{challenge.hint}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export function CluesList({ clues, unlockedClues }) {
+export function CluesList({ clues, unlockedClues, deepAnalyses = [], onAnalyzeClue = () => {}, lockedDeepHints = [] }) {
   return (
     <div>
       <h2 className="text-2xl font-bold text-white mb-4">Ledtrådar</h2>
@@ -124,8 +137,20 @@ export function CluesList({ clues, unlockedClues }) {
                   </div>
                 )}
                 {clue.deepHint && (
-                  <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700/40 text-purple-200 text-xs italic">
-                    Fördjupad analys möjlig: <span className="opacity-70">{clue.deepHint}</span>
+                  <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700/40 text-purple-200 text-xs">
+                    {deepAnalyses.includes(clue.id) ? (
+                      <p className="italic">{clue.deepHint}</p>
+                    ) : lockedDeepHints.includes(clue.id) ? (
+                      <p className="italic text-red-300">Analysen permanent blockerad av tidigare konsekvens.</p>
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        <p className="italic opacity-80">Fördjupad analys möjlig – utlöst konsekvens är oförutsägbar.</p>
+                        <button
+                          onClick={() => onAnalyzeClue(clue.id)}
+                          className="self-start text-[11px] bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded font-semibold tracking-wide"
+                        >Analysera</button>
+                      </div>
+                    )}
                   </div>
                 )}
               </>

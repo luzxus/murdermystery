@@ -1,9 +1,13 @@
 import React from 'react';
 import { Skull } from 'lucide-react';
+import { MANOR_STILL } from '../constants';
 
 export function RevealScreen({ murderer, onRestart }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 p-8">
+    <div
+      className="min-h-screen relative bg-gradient-to-br from-slate-900/85 via-red-900/60 to-slate-900/85 p-8"
+      style={{ backgroundImage: `url(${MANOR_STILL})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
+    >
       <div className="max-w-3xl mx-auto">
         <div className="bg-white/10 rounded-2xl p-8 border border-red-500/50 text-center">
           <Skull className="w-24 h-24 mx-auto mb-6 text-red-500 animate-pulse" />

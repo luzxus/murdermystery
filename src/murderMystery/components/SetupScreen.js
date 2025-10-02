@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Skull, Users, Play, Shield, FileText, AlertCircle } from 'lucide-react';
+import { BackgroundVideo } from './BackgroundVideo';
 import { GM_PASSWORDS } from '../constants';
 
 const PlayerCountSelector = ({ playerCount, setPlayerCount }) => (
@@ -35,7 +36,8 @@ export function SetupScreen({ playerCount, setPlayerCount, onDistribute, showCha
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+    <div className="min-h-screen relative bg-gradient-to-br from-slate-900/80 via-purple-900/70 to-slate-900/80 p-8">
+      <BackgroundVideo />
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-12">
           <Skull className="w-24 h-24 mx-auto mb-6 text-red-500" />

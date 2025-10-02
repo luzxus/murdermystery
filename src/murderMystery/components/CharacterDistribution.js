@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { X, Skull, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { MANOR_STILL } from '../constants';
 
 export function CharacterDistribution({ selectedPlayers, murderer, onStartIntro }) {
   const [selectedPlayerView, setSelectedPlayerView] = useState(null);
   const [showCharacterSecret, setShowCharacterSecret] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
+    <div
+      className="min-h-screen relative bg-gradient-to-br from-slate-900/85 via-purple-900/70 to-slate-900/85 p-8"
+      style={{ backgroundImage: `url(${MANOR_STILL})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
+    >
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-white mb-4 text-center">Rollfördelning</h1>
         <p className="text-gray-300 text-center mb-8">Varje spelare väljer nummer</p>

@@ -7,12 +7,16 @@ export function useRedHerrings({ murdererId, getPhase, getLastClueTags, getSuspi
   const [counts, setCounts] = useState({ real: 0, herring: 0 });
   const usedCountsRef = useRef({});
   const cooldownsRef = useRef({});
+  const pendingHerringRef = useRef(null); // Kö för fördröjd red herring
 
   const registerRealClue = useCallback(() => {
     setCounts(c => ({ ...c, real: c.real + 1 }));
   }, []);
 
   const maybeInject = useCallback((reason) => {
+    // Blockera om det redan finns en pending red herring
+    if (pendingHerringRef.current) return;
+
     const ratio = counts.herring / Math.max(1, counts.real);
     if (ratio >= maxRatio) return;
 
@@ -28,8 +32,14 @@ export function useRedHerrings({ murdererId, getPhase, getLastClueTags, getSuspi
     if (res.herring) {
       usedCountsRef.current = res.updatedUsedCounts;
       cooldownsRef.current = res.updatedCooldowns;
-      setObservations(o => [...o, { id: res.herring.id, text: res.herring.text, reason }]);
-      setCounts(c => ({ ...c, herring: c.herring + 1 }));
+
+      // Schemalägg red herring för visning efter 20-30 sekunder
+      const delay = 20000 + Math.random() * 10000; // 20-30 sekunder
+      pendingHerringRef.current = setTimeout(() => {
+        setObservations(o => [...o, { id: res.herring.id, text: res.herring.text, reason }]);
+        setCounts(c => ({ ...c, herring: c.herring + 1 }));
+        pendingHerringRef.current = null;
+      }, delay);
     }
   }, [counts.herring, counts.real, getPhase, getLastClueTags, getSuspicionMap, murdererId, maxRatio]);
 
@@ -39,6 +49,15 @@ export function useRedHerrings({ murdererId, getPhase, getLastClueTags, getSuspi
       cooldownsRef.current = decrementCooldowns(cooldownsRef.current);
     }, 15000);
     return () => clearInterval(t);
+  }, []);
+
+  // Cleanup pending timers
+  useEffect(() => {
+    return () => {
+      if (pendingHerringRef.current) {
+        clearTimeout(pendingHerringRef.current);
+      }
+    };
   }, []);
 
   return { observations, registerRealClue, maybeInject };

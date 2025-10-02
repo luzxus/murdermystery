@@ -8,3 +8,6 @@ export const Screens = Object.freeze({
 });
 
 export const GM_PASSWORDS = ['jagaroskyldig', 'jagäroskyldig'];
+
+export const VIDEO_MANOR = '/media/videos/manor.mp4';
+export const MANOR_STILL = '/media/images/manor_still.jpg';

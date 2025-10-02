@@ -64,6 +64,6 @@ export const redHerrings = [
     strength: 1,
     weight: 0.7,
     cooldown: 1,
-    maxUses: 2
+    maxUses: 1
   }
 ];
