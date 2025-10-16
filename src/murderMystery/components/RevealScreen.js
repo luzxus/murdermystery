@@ -14,6 +14,15 @@ export function RevealScreen({ murderer, onRestart }) {
           <h1 className="text-5xl font-bold text-white mb-6">Mördaren var...</h1>
 
           <div className="bg-red-900/50 border-4 border-red-500 rounded-2xl p-8 mb-8">
+            {murderer.profileImage && (
+              <div className="flex justify-center mb-6">
+                <img 
+                  src={murderer.profileImage} 
+                  alt={murderer.name}
+                  className="w-32 h-32 rounded-full object-cover border-4 border-red-500 shadow-2xl"
+                />
+              </div>
+            )}
             <h2 className="text-4xl font-bold text-red-300 mb-4">{murderer.name}</h2>
             <p className="text-xl text-gray-300 mb-4">{murderer.role}</p>
             <p className="text-gray-400">{murderer.murdererMotive}</p>

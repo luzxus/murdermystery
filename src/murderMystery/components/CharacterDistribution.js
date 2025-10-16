@@ -41,6 +41,15 @@ export function CharacterDistribution({ selectedPlayers, murderer, onStartIntro 
               </div>
 
               <div className="bg-black/40 rounded-xl p-6 mb-4">
+                {selectedPlayerView.profileImage && (
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={selectedPlayerView.profileImage} 
+                      alt={selectedPlayerView.name}
+                      className="w-32 h-32 rounded-full object-cover border-4 border-purple-500 shadow-lg"
+                    />
+                  </div>
+                )}
                 <h3 className="text-2xl font-bold text-white mb-2">{selectedPlayerView.name}</h3>
                 <p className="text-purple-300 mb-2">{selectedPlayerView.role}</p>
                 <p className="text-sm text-gray-400 mb-4">Accessoar: {selectedPlayerView.accessory}</p>

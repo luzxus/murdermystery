@@ -1,15 +1,15 @@
 import React from 'react';
 import { Eye, AlertTriangle } from 'lucide-react';
 
-export function ObservationsPanel({ observations }) {
+export function ObservationsPanel({ observations = [] }) {
   if (!observations || observations.length === 0) {
     return (
       <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <Eye className="w-16 h-16 text-white/30" />
-          <h3 className="text-2xl font-bold text-white">Inga Observationer Än</h3>
+          <h3 className="text-2xl font-bold text-white">Inga händelser ännu</h3>
           <p className="text-slate-300 max-w-md">
-            Observationer och anomalier kommer att dyka upp under spelets gång.
+            Observationer och intressanta händelser från mordutredningen kommer att samlas här.
           </p>
         </div>
       </div>

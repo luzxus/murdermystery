@@ -30,9 +30,17 @@ export function VotingPanel({ activePlayers, selectedPlayers, votes, castVote, o
               }`}
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className={`w-12 h-12 rounded-full ${player.color} flex items-center justify-center text-white font-bold`}>
-                  {selectedPlayers.indexOf(player) + 1}
-                </div>
+                {player.profileImage ? (
+                  <img 
+                    src={player.profileImage} 
+                    alt={player.name}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white/30"
+                  />
+                ) : (
+                  <div className={`w-12 h-12 rounded-full ${player.color} flex items-center justify-center text-white font-bold`}>
+                    {selectedPlayers.indexOf(player) + 1}
+                  </div>
+                )}
                 <div className="text-left">
                   <h3 className="text-white font-bold">{player.name}</h3>
                   <p className="text-gray-400 text-sm">{player.role}</p>

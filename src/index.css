@@ -28,6 +28,9 @@
 	.animate-toast-out {
 		animation: toast-out 0.45s ease forwards;
 	}
+	.animate-fade-in {
+		animation: fade-in 0.4s ease-out forwards;
+	}
 }
 
 @keyframes toast-in {
@@ -38,4 +41,8 @@
 @keyframes toast-out {
 	0% { transform: translateY(0) scale(1); opacity: 1; }
 	100% { transform: translateY(8px) scale(.92); opacity: 0; filter: blur(2px); }
+}
+@keyframes fade-in {
+	0% { opacity: 0; transform: translateX(-4px); }
+	100% { opacity: 1; transform: translateX(0); }
 }

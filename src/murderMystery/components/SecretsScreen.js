@@ -27,9 +27,18 @@ export function SecretsScreen({ selectedPlayers, onReveal }) {
             <h3 className="text-xl font-bold text-yellow-300 mb-4">Era hemliga ledtrådar:</h3>
             <div className="space-y-3">
               {selectedPlayers.map((player, i) => (
-                <div key={player.id} className="bg-black/40 p-4 rounded-lg">
-                  <p className="text-white font-bold mb-2">Spelare {i + 1}: {player.name}</p>
-                  <p className="text-gray-300 text-sm">{player.secretClue}</p>
+                <div key={player.id} className="bg-black/40 p-4 rounded-lg flex items-start gap-4">
+                  {player.profileImage && (
+                    <img 
+                      src={player.profileImage} 
+                      alt={player.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-yellow-500 flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <p className="text-white font-bold mb-2">Spelare {i + 1}: {player.name}</p>
+                    <p className="text-gray-300 text-sm">{player.secretClue}</p>
+                  </div>
                 </div>
               ))}
             </div>

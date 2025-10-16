@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Play, CheckCircle, Lock, Video } from 'lucide-react';
 
 export function VideoPanel({
-  videoChallenges,
+  videoChallenges = [],
   selectedPlayers,
   onCompleteChallenge,
   isUnlocked
@@ -58,16 +58,25 @@ export function VideoPanel({
         Utför utmaningar för att låsa upp videomaterial som kan avslöja viktiga ledtrådar.
       </p>
 
-      <div className="space-y-4">
-        {availableChallenges.map(challenge => (
-          <VideoChallengeCard
-            key={challenge.id}
-            challenge={challenge}
-            onComplete={handleChallengeComplete}
-            onPlay={handlePlayVideo}
-          />
-        ))}
-      </div>
+      {availableChallenges.length === 0 ? (
+        <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+          <p className="text-slate-400 mb-2">Inga videoutmaningar tillgängliga för de valda karaktärerna.</p>
+          <p className="text-xs text-slate-500">
+            Spelare i spelet: {selectedPlayers.map(p => p.name).join(', ')}
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {availableChallenges.map(challenge => (
+            <VideoChallengeCard
+              key={challenge.id}
+              challenge={challenge}
+              onComplete={handleChallengeComplete}
+              onPlay={handlePlayVideo}
+            />
+          ))}
+        </div>
+      )}
 
       {showingVideo && selectedVideo && (
         <VideoModal

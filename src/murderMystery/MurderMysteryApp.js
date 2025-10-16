@@ -10,13 +10,16 @@ import { shuffle, pickRandom, isAcceptedAnswer } from './utils/gameUtils';
 import { SetupScreen } from './components/SetupScreen';
 import { CharacterCardsModal } from './components/CharacterCardsModal';
 import { CharacterDistribution } from './components/CharacterDistribution';
+import { MurderSequence } from './components/MurderSequence';
 import { IntroScreen } from './components/IntroScreen';
 import { GameScreen } from './components/GameScreen';
 import { SecretsScreen } from './components/SecretsScreen';
 import { RevealScreen } from './components/RevealScreen';
 import { AmbientObservations } from './components/AmbientObservations';
-import { RedHerringToast } from './components/RedHerringToast';
+import { ConversationPrompts } from './components/ConversationPrompts';
+import { VideoUnlockModal } from './components/VideoUnlockModal';
 import { useRedHerrings } from './hooks/useRedHerrings';
+import { useConversationPrompts } from './hooks/useConversationPrompts';
 import { personas as allPersonas } from './data/personas';
 
 export function MurderMysteryApp() {
@@ -27,6 +30,7 @@ export function MurderMysteryApp() {
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [unlockedClues, setUnlockedClues] = useState([]);
   const [deepAnalyses, setDeepAnalyses] = useState([]); // clue ids whose deepHint is revealed
+  const [videoChallenges, setVideoChallenges] = useState(initialVideoChallenges);
   // Consequence / penalty system state
   const [silencedUntil, setSilencedUntil] = useState({}); // {characterId: timestamp}
   const [hintSuppressedUntil, setHintSuppressedUntil] = useState(0);
@@ -45,7 +49,8 @@ export function MurderMysteryApp() {
   const [votes, setVotes] = useState({});
   const [votingInProgress, setVotingInProgress] = useState(false);
   const [showSecretsRound, setShowSecretsRound] = useState(false);
-  const [videoChallenges, setVideoChallenges] = useState(initialVideoChallenges);
+  const [showVideoUnlockModal, setShowVideoUnlockModal] = useState(false);
+  const [hasShownVideoUnlock, setHasShownVideoUnlock] = useState(false);
   // Suspicion tracking (placeholder simple heuristic)
   const suspicionMapRef = useRef({}); // characterId -> score
   const lastClueTagsRef = useRef([]);
@@ -68,22 +73,9 @@ export function MurderMysteryApp() {
       interval = setInterval(() => setTimeRemaining(t => t - 1), 1000);
     } else if (timeRemaining === 0 && timerActive) {
       setTimerActive(false);
-      // Timeout - skip challenge automatically
-      setFeedback({ type: 'error', message: 'Tiden tog slut! Utmaningen hoppas över.' });
-      setTimeout(() => {
-        setUserAnswer('');
-        setShowHint(false);
-        setFeedback(null);
-        if (currentChallenge < challenges.length - 1) {
-          setCurrentChallenge(currentChallenge + 1);
-        } else {
-          setShowSecretsRound(true);
-          setScreen(Screens.SECRETS);
-        }
-      }, 3000);
     }
     return () => clearInterval(interval);
-  }, [timerActive, timeRemaining, currentChallenge, challenges.length]);
+  }, [timerActive, timeRemaining]);
 
   // Actions
   const distributeRoles = () => {
@@ -113,6 +105,33 @@ export function MurderMysteryApp() {
     maxRatio: 0.55
   });
 
+  // track game time for conversation prompts
+  const gameStartTime = useRef(null);
+  const [gameTimeElapsed, setGameTimeElapsed] = useState(0);
+
+  useEffect(() => {
+    if (screen === Screens.GAME && !gameStartTime.current) {
+      gameStartTime.current = Date.now();
+    }
+  }, [screen]);
+
+  useEffect(() => {
+    if (screen === Screens.GAME && gameStartTime.current) {
+      const interval = setInterval(() => {
+        setGameTimeElapsed(Math.floor((Date.now() - gameStartTime.current) / 1000));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [screen]);
+
+  const { currentPrompt, triggerPrompt, dismissPrompt } = useConversationPrompts({
+    selectedPlayers,
+    currentPhase: getPhase(),
+    unlockedClues,
+    completedChallenges: currentChallenge,
+    gameTimeElapsed
+  });
+
   const checkAnswer = () => {
     const challenge = challenges[currentChallenge];
     if (isAcceptedAnswer(userAnswer, challenge.acceptedAnswers)) {
@@ -122,6 +141,8 @@ export function MurderMysteryApp() {
         const next = [...prev, challenge.id];
         // Register clue opened for red herring ratio
         registerRealClue();
+        // trigger conversation prompt for challenge complete
+        triggerPrompt('challenge_complete', currentChallenge + 1);
         // Apply suspicion scoring based on clue definition
         const clue = clues.find(c => c.id === challenge.id);
         if (clue && clue.suspicionWeight) {
@@ -159,6 +180,8 @@ export function MurderMysteryApp() {
     } else {
       setFeedback({ type: 'error', message: 'Fel svar!' });
       setTimeout(() => setFeedback(null), 3000);
+      // trigger conversation prompt for challenge failed
+      triggerPrompt('challenge_failed');
       // Failed answer → small chance injection
       if (Math.random() < 0.35) maybeInject('challengeFail');
     }
@@ -168,6 +191,8 @@ export function MurderMysteryApp() {
     setShowVotingPanel(true);
     setVotingInProgress(true);
     setVotes({});
+    // trigger conversation prompts for voting
+    triggerPrompt('voting_started');
   };
 
   const castVote = (voterId, suspectId) => setVotes(prev => ({ ...prev, [voterId]: suspectId }));
@@ -197,7 +222,7 @@ export function MurderMysteryApp() {
   };
 
   const completeVideoChallenge = (challengeId) => {
-    setVideoChallenges(prev =>
+    setVideoChallenges(prev => 
       prev.map(vc => vc.id === challengeId ? { ...vc, completed: true } : vc)
     );
   };
@@ -210,6 +235,7 @@ export function MurderMysteryApp() {
     setCurrentChallenge(0);
     setUnlockedClues([]);
     setDeepAnalyses([]);
+    setVideoChallenges(initialVideoChallenges);
     setSilencedUntil({});
     setHintSuppressedUntil(0);
     setSubmitDisabledUntil(0);
@@ -222,7 +248,8 @@ export function MurderMysteryApp() {
     setEliminatedPlayers([]);
     setVotes({});
     setFeedback(null);
-    setVideoChallenges(initialVideoChallenges);
+    setShowVideoUnlockModal(false);
+    setHasShownVideoUnlock(false);
     suspicionMapRef.current = {};
   };
 
@@ -239,6 +266,15 @@ export function MurderMysteryApp() {
       if (Math.random() < 0.4) maybeInject('afterClue');
     }
   }, [unlockedClues, maybeInject]);
+
+  // Show video unlock modal when "Analysera säkerhetssystemet" (challenge id 2) is completed
+  useEffect(() => {
+    const isVideoUnlocked = unlockedClues.includes(2);
+    if (isVideoUnlocked && !hasShownVideoUnlock && screen === Screens.GAME) {
+      setShowVideoUnlockModal(true);
+      setHasShownVideoUnlock(true);
+    }
+  }, [unlockedClues, hasShownVideoUnlock, screen]);
 
   // Whenever a new observation (possibly red herring) arrives, adjust suspicion for misleads
   useEffect(() => {
@@ -260,6 +296,8 @@ export function MurderMysteryApp() {
     if (!clue || !clue.deepHint) return;
     if (lockedDeepHints.includes(clueId)) return; // locked by previous consequence
     setDeepAnalyses(prev => [...prev, clueId]);
+    // trigger conversation prompt for deep analysis
+    triggerPrompt('deep_analysis');
     // Apply random hidden consequence
     applyRandomConsequence(clueId);
   };
@@ -363,9 +401,13 @@ export function MurderMysteryApp() {
       <CharacterDistribution
         selectedPlayers={selectedPlayers}
         murderer={murderer}
-        onStartIntro={() => setScreen(Screens.INTRO)}
+        onStartIntro={() => setScreen(Screens.MURDER_SEQUENCE)}
       />
     );
+  }
+
+  if (screen === Screens.MURDER_SEQUENCE) {
+    return <MurderSequence onComplete={() => setScreen(Screens.INTRO)} />;
   }
 
   if (screen === Screens.INTRO) {
@@ -420,16 +462,18 @@ export function MurderMysteryApp() {
           observations={observations}
         />
         <div className="max-w-6xl mx-auto px-4 relative">
-          <AmbientObservations items={observations} />
-          {/* Toast layer */}
-          <div className="fixed bottom-4 right-4 z-50 w-full max-w-sm">
-            <RedHerringToast
-              item={observations[observations.length - 1]}
-              onDone={() => { /* no removal needed: ephemeral */ }}
-              duration={6000}
+          {/* Conversation prompts layer */}
+          {currentPrompt && (
+            <ConversationPrompts
+              prompts={[currentPrompt]}
+              onDismiss={dismissPrompt}
             />
-          </div>
+          )}
         </div>
+        {/* Video unlock modal */}
+        {showVideoUnlockModal && (
+          <VideoUnlockModal onClose={() => setShowVideoUnlockModal(false)} />
+        )}
       </>
     );
   }

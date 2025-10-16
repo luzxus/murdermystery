@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { AlertCircle, Scroll, Video, Eye, AlertTriangle, Clock } from 'lucide-react';
-import { ChallengePanel, CluesList } from './ChallengePanel';
+import { AlertCircle, Search, AlertTriangle, Clock, Users } from 'lucide-react';
+import { ChallengeModal } from './ChallengeModal';
 import { VotingPanel } from './VotingPanel';
-import { VideoPanel } from './VideoPanel';
-import { ObservationsPanel } from './ObservationsPanel';
+import { EvidenceTimeline } from './EvidenceTimeline';
 import { MANOR_STILL } from '../constants';
 
 export function GameScreen({
@@ -41,19 +40,42 @@ export function GameScreen({
   onCompleteVideoChallenge,
   observations
 }) {
-  const [activeTab, setActiveTab] = useState('clues'); // 'clues', 'videos', or 'observations'
+  const [showChallengeModal, setShowChallengeModal] = useState(false);
   const indexLabel = `${currentIndex + 1} / ${totalChallenges}`;
   const composedChallenge = { ...challenge, indexLabel };
 
-  // Check if video tab should be unlocked (2+ clues unlocked)
-  const isVideoTabUnlocked = unlockedClues.length >= 2;
+  // Check if video tab should be unlocked (challenge id 2 completed)
+  const isVideoTabUnlocked = unlockedClues.includes(2);
+
+  const hasMoreChallenges = currentIndex < totalChallenges - 1;
 
   return (
     <div
       className="min-h-screen relative bg-gradient-to-br from-slate-900/85 via-purple-900/70 to-slate-900/85 p-4 md:p-8"
       style={{ backgroundImage: `url(${MANOR_STILL})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
+        {/* Header - Investigation Status */}
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-white mb-2">Utredningen</h1>
+          <div className="flex items-center justify-center gap-6 flex-wrap">
+            <div className="flex items-center gap-2 bg-purple-900/50 px-4 py-2 rounded-lg">
+              <Users className="w-5 h-5 text-purple-300" />
+              <span className="text-white text-sm">
+                {activePlayers.length}/{selectedPlayers.length} aktiva
+              </span>
+            </div>
+            {eliminatedPlayers.length > 0 && (
+              <div className="flex items-center gap-2 bg-red-900/50 px-4 py-2 rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-red-300" />
+                <span className="text-red-200 text-sm">
+                  {eliminatedPlayers.length} eliminerad{eliminatedPlayers.length > 1 ? 'e' : ''}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Active Consequences Banner */}
         <ConsequenceBanner
           silencedUntil={silencedUntil}
@@ -63,126 +85,95 @@ export function GameScreen({
           penaltyTick={penaltyTick}
         />
 
-        {!votingInProgress && (
-          <div className="mb-6 flex justify-center">
-            <button
-              onClick={startVoting}
-              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all hover:scale-105"
-            >
-              <AlertCircle className="w-5 h-5" />
-              Starta omröstning - Anklaga någon!
-            </button>
-          </div>
-        )}
+        {/* Primary Actions - Tools Layer */}
+        <div className="mb-8 space-y-4">
+          {/* Investigation Action */}
+          {hasMoreChallenges && (
+            <div className="bg-gradient-to-r from-purple-900/80 to-indigo-900/80 backdrop-blur-sm rounded-xl p-6 border-2 border-purple-500/30 shadow-xl">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-mono bg-purple-600/40 text-purple-200 px-2 py-0.5 rounded">
+                      ÅTGÄRD #{indexLabel}
+                    </span>
+                  </div>
+                  <h3 className="text-white font-bold text-xl mb-1">{challenge.title}</h3>
+                  <p className="text-purple-200 text-sm">{challenge.description}</p>
+                </div>
+                <button
+                  onClick={() => setShowChallengeModal(true)}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105 shadow-lg flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Search className="w-5 h-5" />
+                  Utför åtgärd
+                </button>
+              </div>
+            </div>
+          )}
 
-        {showVotingPanel && (
-          <VotingPanel
-            activePlayers={activePlayers}
-            selectedPlayers={selectedPlayers}
-            votes={votes}
-            castVote={castVote}
-            onCancel={onCancelVoting}
-            onFinish={onFinishVoting}
-            feedback={feedback}
-          />
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <ChallengePanel
-            challenge={composedChallenge}
-            userAnswer={userAnswer}
-            setUserAnswer={setUserAnswer}
-            onSubmit={checkAnswer}
-            showHint={showHint}
-            setShowHint={setShowHint}
-            feedback={feedback}
-            timeRemaining={timeRemaining}
-            activePlayersCount={activePlayers.length}
-            totalPlayers={selectedPlayers.length}
-            eliminatedCount={eliminatedPlayers.length}
-            hintSuppressedUntil={hintSuppressedUntil}
-            submitDisabledUntil={submitDisabledUntil}
-            penaltyTick={penaltyTick}
-          />
-
-          <div className="space-y-4">
-            {/* Tab Navigation */}
-            <div className="flex gap-2 bg-white/10 p-1 rounded-xl">
+          {/* Accusation Button */}
+          {!votingInProgress && (
+            <div className="flex justify-center">
               <button
-                onClick={() => setActiveTab('clues')}
-                className={`flex-1 py-2 px-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm ${
-                  activeTab === 'clues'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-white/60 hover:text-white/80'
-                }`}
+                onClick={startVoting}
+                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold flex items-center gap-3 transition-all hover:scale-105 shadow-2xl"
               >
-                <Scroll className="w-4 h-4" />
-                Ledtrådar
-              </button>
-              <button
-                onClick={() => setActiveTab('videos')}
-                disabled={!isVideoTabUnlocked}
-                className={`flex-1 py-2 px-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm ${
-                  activeTab === 'videos'
-                    ? 'bg-purple-600 text-white'
-                    : !isVideoTabUnlocked
-                    ? 'text-white/30 cursor-not-allowed'
-                    : 'text-white/60 hover:text-white/80'
-                }`}
-              >
-                <Video className="w-4 h-4" />
-                Videomaterial
-                {!isVideoTabUnlocked && (
-                  <span className="text-xs bg-red-600 px-2 py-0.5 rounded-full">
-                    Låst
-                  </span>
-                )}
-                {isVideoTabUnlocked && videoChallenges.filter(vc => vc.completed).length > 0 && (
-                  <span className="text-xs bg-green-600 px-2 py-0.5 rounded-full">
-                    {videoChallenges.filter(vc => vc.completed).length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => setActiveTab('observations')}
-                className={`flex-1 py-2 px-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm ${
-                  activeTab === 'observations'
-                    ? 'bg-purple-600 text-white'
-                    : 'text-white/60 hover:text-white/80'
-                }`}
-              >
-                <Eye className="w-4 h-4" />
-                Händelser
-                {observations && observations.length > 0 && (
-                  <span className="text-xs bg-amber-600 px-2 py-0.5 rounded-full">
-                    {observations.length}
-                  </span>
-                )}
+                <AlertCircle className="w-6 h-6" />
+                ANKLAGA MÖRDAREN
               </button>
             </div>
+          )}
+        </div>
 
-            {/* Tab Content */}
-            {activeTab === 'clues' ? (
-              <CluesList
-                clues={clues}
-                unlockedClues={unlockedClues}
-                deepAnalyses={deepAnalyses}
-                onAnalyzeClue={onAnalyzeClue}
-                lockedDeepHints={lockedDeepHints}
-              />
-            ) : activeTab === 'videos' ? (
-              <VideoPanel
-                videoChallenges={videoChallenges}
-                selectedPlayers={selectedPlayers}
-                onCompleteChallenge={onCompleteVideoChallenge}
-                isUnlocked={isVideoTabUnlocked}
-              />
-            ) : (
-              <ObservationsPanel observations={observations} />
-            )}
+        {/* Voting Panel */}
+        {showVotingPanel && (
+          <div className="mb-8">
+            <VotingPanel
+              activePlayers={activePlayers}
+              selectedPlayers={selectedPlayers}
+              votes={votes}
+              castVote={castVote}
+              onCancel={onCancelVoting}
+              onFinish={onFinishVoting}
+              feedback={feedback}
+            />
           </div>
+        )}
+
+        {/* Evidence Timeline - Information Layer */}
+        <div className="bg-slate-950/50 backdrop-blur-sm rounded-2xl p-6 border-2 border-slate-700/30 shadow-2xl">
+          <EvidenceTimeline
+            clues={clues}
+            unlockedClues={unlockedClues}
+            deepAnalyses={deepAnalyses}
+            onAnalyzeClue={onAnalyzeClue}
+            lockedDeepHints={lockedDeepHints}
+            selectedPlayers={selectedPlayers}
+            observations={observations}
+            videoChallenges={videoChallenges}
+            onCompleteVideoChallenge={onCompleteVideoChallenge}
+            isVideoUnlocked={isVideoTabUnlocked}
+          />
         </div>
       </div>
+
+      {/* Challenge Modal */}
+      {showChallengeModal && (
+        <ChallengeModal
+          challenge={composedChallenge}
+          userAnswer={userAnswer}
+          setUserAnswer={setUserAnswer}
+          onSubmit={checkAnswer}
+          showHint={showHint}
+          setShowHint={setShowHint}
+          feedback={feedback}
+          timeRemaining={timeRemaining}
+          onClose={() => setShowChallengeModal(false)}
+          hintSuppressedUntil={hintSuppressedUntil}
+          submitDisabledUntil={submitDisabledUntil}
+          penaltyTick={penaltyTick}
+        />
+      )}
     </div>
   );
 }
