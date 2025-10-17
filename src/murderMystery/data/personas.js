@@ -5,22 +5,23 @@ export const personas = [
     id: 1,
     name: "Inspektör Reginald Blackwood",
     accessory: "Detective Mustasch",
-    role: "Privatdetektiv",
+    role: "Privatdetektiv & Spelledare",
     color: "bg-gray-700",
     profileImage: "/media/images/profiles/inspector.png",
     personality: "Metodisk, observant, och något cynisk.",
-    background: "Har löst över 50 fall i London. Känd för sin okonventionella metodik.",
-    secret: "Utreder ett försvunnet arvstvistdokument som Lord påstås ha stulit.",
-    secretClue: "Har ett brunt läderetui i innerfickan med konfidentiella dokument.",
-    murdererMotive: "Lord Sebastian stal bevis från ditt fall och hotade förstöra din karriär.",
+    background: "Har löst över 50 fall i London. Känd för sin okonventionella metodik. Anlitad för att utreda Lord Sebastians mord.",
+    secret: "DU ÄR OSKYLDIG och anlitad som utredare. Du är spelledare och har veto-rätt.",
+    secretClue: "Har ett brunt läderetui i innerfickan med konfidentiella dokument. Du anlitades för att utreda mordet.",
+    murdererMotive: "Du är OSKYLDIG - men kan bli anklagad. Spelarna kan rösta ut dig om ALLA är helt eniga. Om du röstas ut måste spelarna rösta fram en ny inspektör som ärver veto-rätten.",
     characterCard: {
       quirks: "Röker pipa, citerar Sherlock Holmes, har fobi för hundar",
-      relationToVictim: "Lord anlitade dig för 3 år sedan för att hitta en stulen tavla",
-      skills: "Expert på fingeravtryck och spåranalys",
-      weakness: "Alkoholproblem som du döljer väl"
+      relationToVictim: "Anlitad för att utreda mordet på Lord Sebastian",
+      skills: "Expert på fingeravtryck och spåranalys. VETO-RÄTT: Kan stoppa EN omröstning per spel.",
+      weakness: "Kan bli utröstad om ALLA spelare är helt eniga - då måste en ny inspektör röstas fram"
     },
     // new roleplay depth fields
-    personalGoal: "Lösa fallet före någon annan och bevisa att du fortfarande är Londons bästa detektiv - trots dina personliga problem.",
+    personalGoal: "Lösa mordet och identifiera den verkliga mördaren (Dr. Arabella). Använd din veto-rätt strategiskt för att skydda oskyldiga eller avslöja sanningen.",
+    specialPower: "VETO-RÄTT: Du kan stoppa EN omröstning per spel. Använd den klokt. OBS: Du kan bara röstas ut om ALLA spelare är helt eniga. Om du röstas ut ärver nästa valda inspektör din veto-rätt.",
     relationships: {
       allies: [4], // professor thornbury - delar intresse för brottsanalys
       rivals: [7], // den mystiska främlingen - misstror deras hemlighetsmakeriet
@@ -32,10 +33,10 @@ export const personas = [
       "Undersök Dr. Arabellas väska - vad har hon för kemikalier?"
     ],
     roleplayTips: [
-      "Spela nervös när någon nämner whisky eller alkohol",
+      "Leds diskussionerna och håll ordning",
       "Ta upp din pipa och studera den när du tänker",
       "Citera Sherlock Holmes i viktiga stunder: 'När man eliminerat det omöjliga...'",
-      "Bli defensiv om någon ifrågasätter din metodik"
+      "Använd din veto-rätt strategiskt - spara den till rätt tillfälle"
     ]
   },
   {
@@ -47,31 +48,31 @@ export const personas = [
     profileImage: "/media/images/profiles/victor-von-sterling.png",
     personality: "Charmig och optimistisk.",
     background: "Förlorade familjeförmögenheten men håller skenet uppe.",
-    secret: "Har förlorat familjeförmögenheten i poker till Lord Sebastian.",
-    secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst.",
-    murdererMotive: "Lord vann din familjs artefakt i poker och vägrade sälja tillbaka.",
+    secret: "Är medbrottsling till Dr. Arabella i mordet på Lord Sebastian. Hjälpte henne utföra mordet och skyddar henne från misstankar.",
+    secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst. Sågs argumentera hetsigt med Lord Sebastian tidigare under kvällen. Verkar ovanligt beskyddande av Dr. Arabella.",
+    murdererMotive: "Du är MEDBROTTSLING till Dr. Arabella. Ni samarbetade för att mörda Lord Sebastian. Din uppgift är att skydda Arabella från misstankar och vilseleda utredningen.",
     characterCard: {
       quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel",
-      relationToVictim: "Spelade regelbundet poker med Lord - förlorade ofta",
-      skills: "Läser kroppsspråk perfekt, mästare på att ljuga övertygande",
-      weakness: "Spelberoende - kan inte motstå en satsning"
+      relationToVictim: "Spelade regelbundet poker med Lord - förlorade enorma summor. Är skyldig Sebastian en spelskuld som han inte kan betala.",
+      skills: "Läser kroppsspråk perfekt, mästare på att ljuga övertygande, expert på att vilseleda",
+      weakness: "Spelberoende - kan inte motstå en satsning. Desperat pga sin ekonomiska situation. Måste skydda Dr. Arabella till varje pris."
     },
-    personalGoal: "Dölja din ekonomiska ruin och hitta ett sätt att få tillbaka familjeförmögenheten - eller åtminstone se till att ingen annan får den.",
+    personalGoal: "Skydda Dr. Arabella från misstankar och se till att mordet inte spåras tillbaka till er. Vilseleda utredningen och anklaga andra om nödvändigt.",
     relationships: {
-      allies: [5], // max goldstein - båda vet värdet av pengar och makt
+      allies: [6], // dr arabella - din partner i brottet, måste skydda henne
       rivals: [3], // lady margaret - hon ser igenom dina lögner och förakt för din 'oseriösitet'
       secrets: [1] // du såg inspektören dricka i hemlighet
     },
     questionGuide: [
-      "Fråga Maximillian om affärsmöjligheter - kan han hjälpa dig ekonomiskt?",
+      "Skydda Dr. Arabella genom att avleda misstankar från henne",
       "Utmana Lady Margaret om hennes 'perfekta' förflutna",
-      "Flörta subtilt med Dr. Arabella för att få information om uppfinningen"
+      "Vilseleda genom att peka på andra karaktärers motiv och hemligheter"
     ],
     roleplayTips: [
       "Blanda spelkort nervöst när du är stressad",
       "Berätta överdrivna historier om din 'rika' barndom",
-      "Ignorera eller avleda frågor om din ekonomi",
-      "Använd charm för att undvika svåra frågor"
+      "Kom alltid till Dr. Arabellas försvar när hon anklagas",
+      "Använd charm för att vilseleda och avleda misstankar"
     ]
   },
   {
@@ -119,16 +120,16 @@ export const personas = [
     profileImage: "/media/images/profiles/Professor.png",
     personality: "Akademisk och disträ.",
     background: "Undervisar vid Cambridge. Skriv banbrytande bok om mord.",
-    secret: "Plagierat all forskning - Lords anteckningar finns i din väska.",
-    secretClue: "Har en tjock anteckningsbok som skyddas nervöst.",
-    murdererMotive: "Lord visste om plagiatet och hotade avslöja dig.",
+    secret: "Lord Sebastian lurade honom på bokförlags-kontraktet och stal rättigheterna till hans forskning.",
+    secretClue: "Har en tjock anteckningsbok som skyddas nervöst. Har omfattande kunskap om gifter och toxikologi.",
+    murdererMotive: "Lord Sebastian bedrog dig på bokförlags-kontraktet och stal rättigheterna till dina livsverk. Din karriär och forskning förstördes.",
     characterCard: {
       quirks: "Glömmer namn, pratar om brottsfall vid middagen, bär alltid anteckningsbok",
-      relationToVictim: "Lord hittade dina opublicerade teorier i sin fars gamla papper",
-      skills: "Vet allt om mordmetoder, toxikologi och kriminalistik",
-      weakness: "Klumpig socialt, säger ofta för mycket"
+      relationToVictim: "Lord Sebastian lurade dig på bokförlags-kontraktet och tog rättigheterna till din forskning",
+      skills: "Vet allt om mordmetoder, toxikologi och kriminalistik - särskilt gifter",
+      weakness: "Klumpig socialt, säger ofta för mycket. Bitter över det stulna kontraktet."
     },
-    personalGoal: "Bevisa din expertis genom att lösa mordet med vetenskaplig metod - och samtidigt hålla din anteckningsbok dold.",
+    personalGoal: "Bevisa din expertis genom att lösa mordet - men samtidigt dölja din bitterhet och kunskap om gifter som kunde ha använts.",
     relationships: {
       allies: [1], // inspektör blackwood - båda analytiska
       rivals: [6], // dr arabella - avundas hennes genuina genialitet
@@ -191,31 +192,31 @@ export const personas = [
     profileImage: "/media/images/profiles/drarabella.png",
     personality: "Excentrisk och snabbpratande.",
     background: "Briljant uppfinnarinna med eget laboratorium i källaren.",
-    secret: "Lord stal ritningarna till din uppfinning.",
-    secretClue: "Har mekaniska verktyg och kemiska flaskor i väskan - vägrade visa innehållet när någon frågade.",
-    murdererMotive: "Lord stal ritningar och planerade patentera dem själv.",
+    secret: "DU ÄR MÖRDAREN. Lord stal ritningarna till din uppfinning och du mördade honom med hjälp av Victor von Sterling.",
+    secretClue: "Har mekaniska verktyg och kemiska flaskor i väskan - vägrade visa innehållet när någon frågade. Victor verkar ovanligt beskyddande av dig.",
+    murdererMotive: "Lord stal ritningar och planerade patentera dem själv. Du mördade honom tillsammans med Victor von Sterling.",
     characterCard: {
       quirks: "Reparerar saker mitt i samtal, ser mönster i allt, älskar klockor",
-      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - han blev väldigt intresserad",
-      skills: "Expert på kemi, mekanik och explosive ämnen",
-      weakness: "Naiv när det gäller människor - litar för lätt"
+      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - han stal dina ritningar",
+      skills: "Expert på kemi, mekanik och explosive ämnen - perfekt för att planera ett mord",
+      weakness: "Naiv när det gäller människor - litar för lätt. Blir nervös när anklagad direkt."
     },
-    personalGoal: "Få tillbaka dina ritningar och bevisa att du är en genuin uppfinnarinna - inte en mördare.",
+    personalGoal: "Dölja att du är mördaren och se till att någon annan blir anklagad. Victor von Sterling är din medbrottsling och skyddar dig - lita på honom.",
     relationships: {
-      allies: [7], // den mystiska främlingen - båda outsiders på sitt sätt
+      allies: [2], // victor von sterling - din medbrottsling och beskyddare
       rivals: [4], // professor thornbury - hans teoretiska kunskap vs din praktiska
-      secrets: [2] // du såg victor stjäla något från lords kontor (du tror det var ett dokument)
+      secrets: [7] // du vet att den mystiska främlingen har falskt namn
     },
     questionGuide: [
-      "Fråga Professorn om teoretisk toxikologi vs praktisk tillämpning",
-      "Diskutera mekanik med Inspektören - din ingenjörskunskap kan hjälpa",
-      "Var försiktig med Max - han verkar intresserad av att köpa din uppfinning"
+      "Spela naiv och entusiastisk om brottet - visa 'nyfikenhet'",
+      "Låt Victor komma till ditt försvar när du anklagas",
+      "Anklaga andra subtilt genom att 'observera' tekniska detaljer"
     ],
     roleplayTips: [
-      "Plocka med små mekaniska delar när du pratar",
+      "Plocka med små mekaniska delar när du pratar för att verka distraherad",
       "Bli plötsligt distraherad av klockor eller maskiner i rummet",
-      "Prata fort och tekniskt när du blir upphetsad",
-      "Visa äkta nyfikenhet på hur saker fungerar - även brottet"
+      "Spela oskyldig och nyfiken - 'Hur kunde mördaren ha gjort det?'",
+      "Lita på Victor - han är där för att skydda dig"
     ]
   },
   {

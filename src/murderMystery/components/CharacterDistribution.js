@@ -5,6 +5,7 @@ import { MANOR_STILL } from '../constants';
 export function CharacterDistribution({ selectedPlayers, murderer, onStartIntro }) {
   const [selectedPlayerView, setSelectedPlayerView] = useState(null);
   const [showCharacterSecret, setShowCharacterSecret] = useState(false);
+  const [viewedPlayers, setViewedPlayers] = useState(new Set());
 
   return (
     <div
@@ -16,18 +17,38 @@ export function CharacterDistribution({ selectedPlayers, murderer, onStartIntro 
         <p className="text-gray-300 text-center mb-8">Varje spelare väljer nummer</p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {selectedPlayers.map((player, i) => (
-            <button
-              key={player.id}
-              onClick={() => { setSelectedPlayerView(player); setShowCharacterSecret(false); }}
-              className="bg-white/10 rounded-xl p-6 border border-white/20 hover:bg-white/20 transition-all text-center"
-            >
-              <div className={`w-16 h-16 mx-auto mb-3 rounded-full ${player.color} flex items-center justify-center text-white font-bold text-2xl`}>
-                {i + 1}
-              </div>
-              <p className="text-white font-bold">Spelare {i + 1}</p>
-            </button>
-          ))}
+          {selectedPlayers.map((player, i) => {
+            const isViewed = viewedPlayers.has(player.id);
+            return (
+              <button
+                key={player.id}
+                onClick={() => {
+                  setSelectedPlayerView(player);
+                  setShowCharacterSecret(false);
+                  setViewedPlayers(prev => new Set([...prev, player.id]));
+                }}
+                className={`rounded-xl p-6 border transition-all text-center ${
+                  isViewed
+                    ? 'bg-gray-700/50 border-gray-500/30 opacity-60'
+                    : 'bg-white/10 border-white/20 hover:bg-white/20'
+                }`}
+              >
+                {player.profileImage ? (
+                  <img
+                    src={player.profileImage}
+                    alt={player.name}
+                    className="w-20 h-20 mx-auto mb-3 rounded-full object-cover border-2 border-purple-400"
+                  />
+                ) : (
+                  <div className={`w-20 h-20 mx-auto mb-3 rounded-full ${player.color} flex items-center justify-center text-white font-bold text-2xl`}>
+                    {i + 1}
+                  </div>
+                )}
+                <p className="text-white font-bold text-sm">{player.name}</p>
+                <p className="text-gray-400 text-xs mt-1">Spelare {i + 1}</p>
+              </button>
+            );
+          })}
         </div>
 
         {selectedPlayerView && (
@@ -78,12 +99,22 @@ export function CharacterDistribution({ selectedPlayers, murderer, onStartIntro 
 
               {showCharacterSecret && (
                 <div className={`rounded-xl p-6 border-2 ${
-                  selectedPlayerView.id === murderer.id ? 'bg-red-900/50 border-red-500' : 'bg-green-900/30 border-green-500'
+                  selectedPlayerView.id === murderer.id
+                    ? 'bg-red-900/50 border-red-500'
+                    : selectedPlayerView.id === 2
+                    ? 'bg-orange-900/50 border-orange-500'
+                    : 'bg-green-900/30 border-green-500'
                 }`}>
                   {selectedPlayerView.id === murderer.id ? (
                     <>
                       <Skull className="w-16 h-16 mx-auto mb-4 text-red-400" />
                       <h3 className="text-2xl font-bold text-red-400 mb-4 text-center">MÖRDAREN</h3>
+                      <p className="text-white text-sm">{selectedPlayerView.murdererMotive}</p>
+                    </>
+                  ) : selectedPlayerView.id === 2 ? (
+                    <>
+                      <Skull className="w-16 h-16 mx-auto mb-4 text-orange-400" />
+                      <h3 className="text-2xl font-bold text-orange-400 mb-4 text-center">MEDBROTTSLING</h3>
                       <p className="text-white text-sm">{selectedPlayerView.murdererMotive}</p>
                     </>
                   ) : (

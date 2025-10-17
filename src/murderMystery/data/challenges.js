@@ -61,15 +61,15 @@ export const challenges = [
   },
   {
     id: 5,
-    title: "Analysera giftets ursprung",
-    description: "Den toxikologiska rapporten innehåller avgörande information om var och hur giftet framställdes. Detta är den sista pusselbiten.",
-    puzzle: "Toxikologisk rapport (slutgiltig):\n\n'Substansen identifieras som ett syntetiskt cyanid-derivat, variant HC-7. Detta är INTE kommersiellt tillgängligt.\n\nFramställning kräver:\n- Avancerad destillationsapparatur och vakuumkammare\n- Expertis inom organisk kemisyntes\n- Tillgång till kontrollerade prekursorkemikalier\n- Privat forskningsfacilitet (ej tillgängligt i offentliga laboratorier)\n\nBaserat på kristallstrukturen bedöms giftet ha framställts inom 24-48 timmar före mordtillfället.'\n\nButlerns anteckning:\n'Flera av gästerna har vetenskaplig bakgrund, men endast EN har egen privat forskningsfacilitet här på godset - inrättad i källarvalven för mekaniska och kemiska experiment.'",
-    hint: "Tänk tillbaka på vem som beskrivits ha 'eget laboratorium i källaren' och arbetar med både mekanik OCH kemi. Vem har den typ av privat facility som krävs?",
-    answer: "EGET LABORATORIUM",
-    acceptedAnswers: ["EGET LABORATORIUM", "LABORATORIUM", "LAB", "PRIVAT LABORATORIUM", "LABORATORIET", "LABB", "EGET LAB", "PRIVAT LAB"],
-    instruction: "Vilken typ av facilitet krävdes för att framställa giftet?",
+    title: "Undersök kemikalieflaskan",
+    description: "En mystisk glasflaska har hittats nära biblioteket. Den innehåller rester av en okänd kemikalie och har ett partiellt etikett.",
+    puzzle: "På flaskan finns en delvis bortsliten etikett:\n\n'HC-__ VARNING: CY__ID\nFörvaring: -2_°C\nTillverkad: [datum suddigt]\nURSPRUNG: ______valv'\n\nButlerns vittnesberättelse:\n'Strax efter midnatt, när jag gick min vanliga runda runt herrgården, såg jag något gnistra i buskagen utanför biblioteksfönstret. När jag undersökte hittade jag denna flaska, gömd under löv. Den var fortfarande kall i handen. Någon måste ha gömt den där under kvällen.'\n\nVilken typ av plats slutar på '-valv' och kan ha varit ursprunget?",
+    hint: "Tänk på platser i en herrgård där man skulle förvara kemikalier. Vilken typ av rum finns under markplan och har rätt temperatur för känsliga ämnen?",
+    answer: "KÄLLARVALV",
+    acceptedAnswers: ["KÄLLARVALV", "KALLARVALV", "KÄLLAREN", "KÄLLARVALVET", "KALLARVALVET", "LABORATORIEVALV", "LABORATORIET"],
+    instruction: "Varifrån kom kemikalieflaskan ursprungligen?",
     type: "investigation",
     timeLimit: 10,
-    difficulty: "Svår"
+    difficulty: "Medel"
   }
 ];

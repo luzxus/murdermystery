@@ -1,6 +1,6 @@
 export const Screens = Object.freeze({
   SETUP: 'setup',
-  CHARACTERS: 'characters',
+  DICE_ROLL: 'dice_roll',
   MURDER_SEQUENCE: 'murder_sequence',
   INTRO: 'intro',
   GAME: 'game',

@@ -4,18 +4,8 @@ import { Play, SkipForward } from 'lucide-react';
 const VIDEO_SCENES = [
   {
     id: 1,
-    src: '/media/videos/corridor_scene_1.mp4',
-    title: 'Scen 1: Korridoren'
-  },
-  {
-    id: 2,
-    src: '/media/videos/library_scene_2.mp4',
-    title: 'Scen 2: Biblioteket'
-  },
-  {
-    id: 3,
-    src: '/media/videos/writing_note_scene_3.mp4',
-    title: 'Scen 3: Det sista brevet'
+    src: '/media/videos/harrington_scenes.mp4',
+    title: 'Sebastians sista timmar'
   }
 ];
 
@@ -81,13 +71,11 @@ export function MurderSequence({ onComplete }) {
           
           <div className="bg-white/10 rounded-lg p-6 mb-8">
             <p className="text-gray-300 mb-2">
-              Ni kommer att se <strong className="text-white">3 scener</strong>:
+              Ni kommer att se Sebastians förlopp innan hans död.
             </p>
-            <ul className="text-left text-gray-400 space-y-2 max-w-md mx-auto">
-              <li>• Scen 1: Korridoren</li>
-              <li>• Scen 2: Biblioteket</li>
-              <li>• Scen 3: Det sista brevet</li>
-            </ul>
+            <p className="text-gray-400 text-sm max-w-md mx-auto">
+              Var uppmärksam på detaljer - de kan innehålla ledtrådar till mordet.
+            </p>
           </div>
 
           <button

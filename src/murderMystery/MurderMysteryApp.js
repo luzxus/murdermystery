@@ -9,7 +9,7 @@ import { shuffle, pickRandom, isAcceptedAnswer } from './utils/gameUtils';
 
 import { SetupScreen } from './components/SetupScreen';
 import { CharacterCardsModal } from './components/CharacterCardsModal';
-import { CharacterDistribution } from './components/CharacterDistribution';
+import { DiceRollScreen } from './components/DiceRollScreen';
 import { MurderSequence } from './components/MurderSequence';
 import { IntroScreen } from './components/IntroScreen';
 import { GameScreen } from './components/GameScreen';
@@ -18,6 +18,7 @@ import { RevealScreen } from './components/RevealScreen';
 import { AmbientObservations } from './components/AmbientObservations';
 import { ConversationPrompts } from './components/ConversationPrompts';
 import { VideoUnlockModal } from './components/VideoUnlockModal';
+import { ButlerTestimonyModal } from './components/ButlerTestimonyModal';
 import { useRedHerrings } from './hooks/useRedHerrings';
 import { useConversationPrompts } from './hooks/useConversationPrompts';
 import { personas as allPersonas } from './data/personas';
@@ -51,6 +52,7 @@ export function MurderMysteryApp() {
   const [showSecretsRound, setShowSecretsRound] = useState(false);
   const [showVideoUnlockModal, setShowVideoUnlockModal] = useState(false);
   const [hasShownVideoUnlock, setHasShownVideoUnlock] = useState(false);
+  const [showButlerTestimony, setShowButlerTestimony] = useState(false);
   // Suspicion tracking (placeholder simple heuristic)
   const suspicionMapRef = useRef({}); // characterId -> score
   const lastClueTagsRef = useRef([]);
@@ -83,7 +85,7 @@ export function MurderMysteryApp() {
     setSelectedPlayers(selected);
     const arabella = selected.find(p => p.id === 6);
     setMurderer(arabella || pickRandom(selected));
-    setScreen(Screens.CHARACTERS);
+    setScreen(Screens.DICE_ROLL);
   };
 
   // Derive phase from challenge progression
@@ -173,8 +175,8 @@ export function MurderMysteryApp() {
         if (currentChallenge < challenges.length - 1) {
           setCurrentChallenge(currentChallenge + 1);
         } else {
-          setShowSecretsRound(true);
-          setScreen(Screens.SECRETS);
+          // show butler testimony after final challenge
+          setShowButlerTestimony(true);
         }
       }, 2000);
     } else {
@@ -250,6 +252,7 @@ export function MurderMysteryApp() {
     setFeedback(null);
     setShowVideoUnlockModal(false);
     setHasShownVideoUnlock(false);
+    setShowButlerTestimony(false);
     suspicionMapRef.current = {};
   };
 
@@ -396,12 +399,11 @@ export function MurderMysteryApp() {
     );
   }
 
-  if (screen === Screens.CHARACTERS) {
+  if (screen === Screens.DICE_ROLL) {
     return (
-      <CharacterDistribution
+      <DiceRollScreen
         selectedPlayers={selectedPlayers}
-        murderer={murderer}
-        onStartIntro={() => setScreen(Screens.MURDER_SEQUENCE)}
+        onContinue={() => setScreen(Screens.MURDER_SEQUENCE)}
       />
     );
   }
@@ -473,6 +475,16 @@ export function MurderMysteryApp() {
         {/* Video unlock modal */}
         {showVideoUnlockModal && (
           <VideoUnlockModal onClose={() => setShowVideoUnlockModal(false)} />
+        )}
+        {/* Butler testimony modal after final challenge */}
+        {showButlerTestimony && (
+          <ButlerTestimonyModal 
+            onClose={() => {
+              setShowButlerTestimony(false);
+              setShowSecretsRound(true);
+              setScreen(Screens.SECRETS);
+            }} 
+          />
         )}
       </>
     );

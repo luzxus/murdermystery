@@ -47,7 +47,18 @@ export function GameScreen({
   // Check if video tab should be unlocked (challenge id 2 completed)
   const isVideoTabUnlocked = unlockedClues.includes(2);
 
-  const hasMoreChallenges = currentIndex < totalChallenges - 1;
+  const hasMoreChallenges = currentIndex < totalChallenges;
+
+  // close modal when answer is correct
+  React.useEffect(() => {
+    if (feedback?.type === 'success' && showChallengeModal) {
+      // delay closing slightly so user sees success message
+      const timer = setTimeout(() => {
+        setShowChallengeModal(false);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback, showChallengeModal]);
 
   return (
     <div

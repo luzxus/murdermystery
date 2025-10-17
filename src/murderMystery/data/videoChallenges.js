@@ -19,18 +19,18 @@ export const videoChallenges = [
     completed: false
   },
   {
-    id: 'professor-victor-arguing',
-    characterId: [4, 5], // Professor Edmund Thornbury & Max Goldstein (Victor = id 2, men i videon är det Max)
-    characterName: 'Professor Edmund Thornbury & Max Goldstein',
-    videoPath: '/media/videos/intrigues/professor-and-victor-arguing.mp4',
-    title: 'Det Heta Argumentet',
-    description: 'Ett ögonblick av spänning mellan två gäster. Vad ligger bakom konflikten?',
+    id: 'victor-sebastian-arguing',
+    characterId: 2, // Victor von Sterling
+    characterName: 'Victor von Sterling',
+    videoPath: '/media/videos/intrigues/victor_sebastian_argument.mp4',
+    title: 'Spelskuldens Konfrontation',
+    description: 'Victor och Lord Sebastian ses argumentera hetsigt. Diskussionen verkar handla om pengar...',
     challenge: {
-      title: 'Debatten',
-      instructions: 'Professorn och Max håller en 60-sekunders debatt om ett påhittat ämne (t.ex. "Vad är viktigast - vetenskap eller pengar?").',
-      alternativeInstructions: 'Alternativ: De spelar "Ja, men..." där de argumenterar mot varandra i 1 minut.'
+      title: 'Försäljningspitchen',
+      instructions: 'Victor måste på 90 sekunder försöka "sälja" en värdelös sak (t.ex. en penna, ett gem) till gruppen som om den vore ovärderlig. Han måste övertyga minst 2 personer att "köpa" den.',
+      alternativeInstructions: 'Alternativ: Victor spelar "Lögnen & Sanningen" - berättar 3 påståenden om sig själv (2 lögner, 1 sanning) och gruppen måste gissa vilken som är sann.'
     },
-    suspicionImpact: 'Väcker misstankar mot både Professorn och Max',
+    suspicionImpact: 'Väcker misstankar om Victors ekonomiska desperation',
     unlocked: false,
     completed: false
   },
@@ -38,7 +38,7 @@ export const videoChallenges = [
     id: 'ladywhitmore-sebastian',
     characterId: 3, // Lady Margaret Whitmore
     characterName: 'Lady Margaret Whitmore',
-    videoPath: '/media/videos/intrigues/ladywhitmore-sebastian.mp4',
+    videoPath: '/media/videos/intrigues/sebastian_whitmore_corridor.mp4',
     title: 'Den Sista Vittningen',
     description: 'Ett avgörande ögonblick strax före mordet. Vad hände egentligen?',
     challenge: {
@@ -67,18 +67,34 @@ export const videoChallenges = [
     completed: false
   },
   {
-    id: 'mysterious-stranger-entering',
+    id: 'mysterious-stranger-searching',
     characterId: 7, // Den Mystiska Främlingen
     characterName: 'Den Mystiska Främlingen',
-    videoPath: '/media/videos/intrigues/mysterious-stranger-entering.mp4',
-    title: 'Fotografiet',
-    description: 'Den mystiska främlingen observeras bära något vid sitt bröst. Vad kan det betyda?',
+    videoPath: '/media/videos/intrigues/stranger_searching_office.mp4',
+    title: 'Hemliga Efterforskningar',
+    description: 'Den mystiska främlingen ses smyga runt i Lords kontor. Vad söker de efter?',
     challenge: {
-      title: 'Fotografiet',
+      title: 'Spionage-Scenen',
       instructions: 'Den Mystiska Främlingen måste beskriva ett viktigt minne/ögonblick från sitt liv (påhittat backstory) i 60 sekunder.',
       alternativeInstructions: 'Alternativ: Håll pokerfejs i 30 sekunder medan andra försöker få honom att le/reagera.'
     },
-    suspicionImpact: 'Deltagarna börjar undra om hans alibi',
+    suspicionImpact: 'Väcker allvarliga misstankar om främlingens avsikter',
+    unlocked: false,
+    completed: false
+  },
+  {
+    id: 'professor-mixing-chemicals',
+    characterId: 4, // Professor Edmund Thornbury
+    characterName: 'Professor Edmund Thornbury',
+    videoPath: '/media/videos/intrigues/professor_mixing_chemicals.mp4',
+    title: 'Kemiska Experiment',
+    description: 'Professorn ses hantera kemikalier i ett avskilt rum. Vad blandar han egentligen?',
+    challenge: {
+      title: 'Vetenskaplig Demonstration',
+      instructions: 'Professorn måste hålla en 90-sekunders föreläsning om ett vetenskapligt ämne (giftläran, kemi, forensik etc.) med minst 5 "fakta" (påhittade är ok). Han måste tala akademiskt och använda minst 3 latinska termer.',
+      alternativeInstructions: 'Alternativ: Professorn ska glömma bort namnen på 3 personer i rummet och försöka beskriva dem istället utan att säga deras namn.'
+    },
+    suspicionImpact: 'Väcker allvarliga misstankar om Professorns kemiska kunskaper',
     unlocked: false,
     completed: false
   },
