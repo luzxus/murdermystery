@@ -8,6 +8,12 @@ import ScienceIcon from '@mui/icons-material/Science';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import StarIcon from '@mui/icons-material/Star';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 /**
  * EvidenceTimeline - Tab-based filtering of evidence, observations, and videos
@@ -23,7 +29,8 @@ export function EvidenceTimeline({
   observations = [],
   videoChallenges = [],
   onCompleteVideoChallenge,
-  isVideoUnlocked = false
+  isVideoUnlocked = false,
+  onVideoStateChange
 }) {
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'evidence', 'videos', 'observations'
 
@@ -167,6 +174,7 @@ export function EvidenceTimeline({
                 video={item.data}
                 selectedPlayers={selectedPlayers}
                 onComplete={onCompleteVideoChallenge}
+                onVideoStateChange={onVideoStateChange}
               />;
             }
             return null;
@@ -316,8 +324,10 @@ function ObservationCard({ observation }) {
   );
 }
 
-function VideoCard({ video, selectedPlayers, onComplete }) {
+function VideoCard({ video, selectedPlayers, onComplete, onVideoStateChange }) {
   const [showVideo, setShowVideo] = React.useState(false);
+  const [showChallenge, setShowChallenge] = React.useState(false);
+  const videoModalRef = React.useRef(null);
 
   const handleComplete = () => {
     if (!video.completed) {
@@ -328,6 +338,25 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
   const handleWatchVideo = () => {
     setShowVideo(true);
   };
+
+  // Scroll modal into view when video opens
+  React.useEffect(() => {
+    if (showVideo && videoModalRef.current) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        videoModalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Also lock body scroll
+        document.body.style.overflow = 'hidden';
+      }, 100);
+    } else {
+      // Restore body scroll when modal closes
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showVideo]);
 
   return (
     <>
@@ -348,7 +377,7 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
               )}
             </div>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <span className={`text-xs font-mono px-2 py-0.5 rounded ${
                   video.completed
                     ? 'bg-green-600/40 text-green-200'
@@ -356,6 +385,12 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
                 }`}>
                   VIDEOMATERIAL
                 </span>
+                {video.challenge && !video.completed && (
+                  <span className="text-xs bg-yellow-600/40 text-yellow-200 px-2 py-0.5 rounded border border-yellow-500/30 flex items-center gap-1">
+                    <StarIcon sx={{ fontSize: 14 }} />
+                    VALFRI UTMANING
+                  </span>
+                )}
                 {video.completed && (
                   <span className="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded border border-green-500/30 flex items-center gap-1">
                     <CheckCircleIcon sx={{ fontSize: 14 }} /> GRANSKAD
@@ -370,19 +405,42 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
             </div>
           </div>
 
-          {/* Challenge section */}
+          {/* Optional Challenge section - Collapsible */}
           {video.challenge && !video.completed && (
-            <div className="bg-purple-900/30 border-2 border-purple-500/30 rounded-lg p-4">
-              <h5 className="text-purple-300 font-bold text-sm mb-2">
-                Utmaning: {video.challenge.title}
-              </h5>
-              <p className="text-slate-300 text-sm mb-2">
-                {video.challenge.instructions}
-              </p>
-              {video.challenge.alternativeInstructions && (
-                <p className="text-slate-400 text-xs italic">
-                  {video.challenge.alternativeInstructions}
-                </p>
+            <div className="border-t border-white/10 pt-3">
+              <button
+                onClick={() => setShowChallenge(!showChallenge)}
+                className="w-full text-left text-sm text-yellow-300 hover:text-yellow-200 font-semibold flex items-center justify-between transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <AssignmentIcon sx={{ fontSize: 16 }} />
+                  {showChallenge ? 'Dölj' : 'Visa'} valfri utmaning
+                </span>
+                {showChallenge ? <ExpandLessIcon sx={{ fontSize: 20 }} /> : <ExpandMoreIcon sx={{ fontSize: 20 }} />}
+              </button>
+
+              {showChallenge && (
+                <div className="mt-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 space-y-2">
+                  <h5 className="text-yellow-300 font-bold text-sm flex items-center gap-2">
+                    <AssignmentIcon sx={{ fontSize: 18 }} />
+                    {video.challenge.title}
+                  </h5>
+                  <p className="text-slate-300 text-sm">
+                    {video.challenge.instructions}
+                  </p>
+                  {video.challenge.alternativeInstructions && (
+                    <p className="text-slate-400 text-xs italic flex items-start gap-1">
+                      <EmojiObjectsIcon sx={{ fontSize: 14 }} className="mt-0.5" />
+                      <span>{video.challenge.alternativeInstructions}</span>
+                    </p>
+                  )}
+                  <div className="flex items-start gap-2 bg-yellow-800/30 rounded p-2 mt-2">
+                    <InfoIcon sx={{ fontSize: 16 }} className="text-yellow-200 mt-0.5 flex-shrink-0" />
+                    <p className="text-yellow-200 text-xs font-semibold">
+                      Denna utmaning är valfri - du kan markera videon som klar utan att genomföra den.
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -411,8 +469,12 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
 
       {/* Video Modal */}
       {showVideo && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4" onClick={() => setShowVideo(false)}>
-          <div className="max-w-4xl w-full" onClick={e => e.stopPropagation()}>
+        <div
+          ref={videoModalRef}
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setShowVideo(false)}
+        >
+          <div className="max-w-4xl w-full my-8" onClick={e => e.stopPropagation()}>
             <div className="bg-slate-900 rounded-xl overflow-hidden">
               <div className="p-4 bg-slate-800 flex items-center justify-between">
                 <h3 className="text-white font-bold">{video.title}</h3>
@@ -428,7 +490,10 @@ function VideoCard({ video, selectedPlayers, onComplete }) {
                 controls
                 autoPlay
                 className="w-full"
+                onPlay={() => onVideoStateChange?.(true)}
+                onPause={() => onVideoStateChange?.(false)}
                 onEnded={() => {
+                  onVideoStateChange?.(false);
                   if (!video.completed) {
                     handleComplete();
                   }

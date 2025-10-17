@@ -57,7 +57,7 @@ export const redHerrings = [
   },
   {
     id: 'rh_tremble_detective',
-    text: 'Detektivens hand darrar svagt när han håller pipan.',
+    text: 'Detektivens hand darrar svagt när han håller sitt anteckningsblock.',
     tags: ['stress','beteende'],
     misleads: [1],
     phase: 'any',

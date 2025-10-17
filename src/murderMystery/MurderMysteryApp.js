@@ -13,18 +13,19 @@ import { DiceRollScreen } from './components/DiceRollScreen';
 import { MurderSequence } from './components/MurderSequence';
 import { IntroScreen } from './components/IntroScreen';
 import { GameScreen } from './components/GameScreen';
-import { SecretsScreen } from './components/SecretsScreen';
+import { AccusationScreen } from './components/AccusationScreen';
 import { RevealScreen } from './components/RevealScreen';
-import { AmbientObservations } from './components/AmbientObservations';
 import { ConversationPrompts } from './components/ConversationPrompts';
 import { VideoUnlockModal } from './components/VideoUnlockModal';
 import { ButlerTestimonyModal } from './components/ButlerTestimonyModal';
 import { useRedHerrings } from './hooks/useRedHerrings';
 import { useConversationPrompts } from './hooks/useConversationPrompts';
+import { MusicPlayer } from './components/MusicPlayer';
 import { personas as allPersonas } from './data/personas';
 
 export function MurderMysteryApp() {
   const [screen, setScreen] = useState(Screens.SETUP);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [playerCount, setPlayerCount] = useState(5);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [murderer, setMurderer] = useState(null);
@@ -53,6 +54,7 @@ export function MurderMysteryApp() {
   const [showVideoUnlockModal, setShowVideoUnlockModal] = useState(false);
   const [hasShownVideoUnlock, setHasShownVideoUnlock] = useState(false);
   const [showButlerTestimony, setShowButlerTestimony] = useState(false);
+  const [isFinalVote, setIsFinalVote] = useState(false);
   // Suspicion tracking (placeholder simple heuristic)
   const suspicionMapRef = useRef({}); // characterId -> score
   const lastClueTagsRef = useRef([]);
@@ -106,6 +108,7 @@ export function MurderMysteryApp() {
     getSuspicionMap,
     maxRatio: 0.55
   });
+
 
   // track game time for conversation prompts
   const gameStartTime = useRef(null);
@@ -205,10 +208,25 @@ export function MurderMysteryApp() {
       return;
     }
     const accusedPlayer = selectedPlayers.find(p => p.id === votes.group);
+
+    // Check if they accused the murderer (Dr. Arabella)
     if (accusedPlayer.id === murderer.id) {
       setShowVotingPanel(false);
+      setIsFinalVote(false);
       setScreen(Screens.REVEAL);
+    } else if (isFinalVote) {
+      // FINAL VOTE: If wrong, they lose - game over
+      setShowVotingPanel(false);
+      setFeedback({
+        type: 'error',
+        message: `${accusedPlayer.name} var OSKYLDIG! NI FÖRLORADE! Dr. Arabella och Victor von Sterling går fria från mordet...`
+      });
+      setTimeout(() => {
+        setScreen(Screens.REVEAL);
+        setIsFinalVote(false);
+      }, 5000);
     } else {
+      // Regular vote: eliminate and continue
       setEliminatedPlayers([...eliminatedPlayers, accusedPlayer.id]);
       setFeedback({
         type: 'error',
@@ -395,33 +413,59 @@ export function MurderMysteryApp() {
         {showCharacterCards && (
           <CharacterCardsModal personas={personas} onClose={() => setShowCharacterCards(false)} />
         )}
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
   }
 
   if (screen === Screens.DICE_ROLL) {
     return (
-      <DiceRollScreen
-        selectedPlayers={selectedPlayers}
-        onContinue={() => setScreen(Screens.MURDER_SEQUENCE)}
-      />
+      <>
+        <DiceRollScreen
+          selectedPlayers={selectedPlayers}
+          onContinue={() => setScreen(Screens.MURDER_SEQUENCE)}
+        />
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
+      </>
     );
   }
 
   if (screen === Screens.MURDER_SEQUENCE) {
-    return <MurderSequence onComplete={() => setScreen(Screens.INTRO)} />;
+    return (
+      <>
+        <MurderSequence
+          onComplete={() => setScreen(Screens.INTRO)}
+          onVideoStateChange={setIsVideoPlaying}
+        />
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
+      </>
+    );
   }
 
   if (screen === Screens.INTRO) {
-    return <IntroScreen onStartGame={() => setScreen(Screens.GAME)} />;
+    return (
+      <>
+        <IntroScreen onStartGame={() => setScreen(Screens.GAME)} />
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
+      </>
+    );
   }
 
   if (screen === Screens.SECRETS || showSecretsRound) {
     return (
-      <SecretsScreen
-        selectedPlayers={selectedPlayers}
-        onReveal={() => setScreen(Screens.REVEAL)}
-      />
+      <>
+        <AccusationScreen
+          selectedPlayers={selectedPlayers}
+          murderer={murderer}
+          onReveal={() => {
+            setShowSecretsRound(false);
+            setScreen(Screens.GAME);
+            setIsFinalVote(true); // Mark this as the final vote
+            startVoting();
+          }}
+        />
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
+      </>
     );
   }
 
@@ -445,7 +489,7 @@ export function MurderMysteryApp() {
           onAnalyzeClue={analyzeClue}
           startVoting={startVoting}
           showVotingPanel={showVotingPanel}
-          onCancelVoting={() => { setShowVotingPanel(false); setVotingInProgress(false); setVotes({}); }}
+          onCancelVoting={() => { setShowVotingPanel(false); setVotingInProgress(false); setVotes({}); setIsFinalVote(false); }}
           onFinishVoting={finishVoting}
           votes={votes}
           castVote={castVote}
@@ -453,6 +497,7 @@ export function MurderMysteryApp() {
           selectedPlayers={selectedPlayers}
           eliminatedPlayers={eliminatedPlayers}
           votingInProgress={votingInProgress}
+          isFinalVote={isFinalVote}
           silencedUntil={silencedUntil}
           hintSuppressedUntil={hintSuppressedUntil}
           submitDisabledUntil={submitDisabledUntil}
@@ -462,6 +507,7 @@ export function MurderMysteryApp() {
           videoChallenges={videoChallenges}
           onCompleteVideoChallenge={completeVideoChallenge}
           observations={observations}
+          onVideoStateChange={setIsVideoPlaying}
         />
         <div className="max-w-6xl mx-auto px-4 relative">
           {/* Conversation prompts layer */}
@@ -478,23 +524,34 @@ export function MurderMysteryApp() {
         )}
         {/* Butler testimony modal after final challenge */}
         {showButlerTestimony && (
-          <ButlerTestimonyModal 
+          <ButlerTestimonyModal
             onClose={() => {
               setShowButlerTestimony(false);
               setShowSecretsRound(true);
               setScreen(Screens.SECRETS);
-            }} 
+            }}
+            onVideoStateChange={setIsVideoPlaying}
           />
         )}
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
   }
 
   if (screen === Screens.REVEAL) {
-    return <RevealScreen murderer={murderer} onRestart={restart} />;
+    return (
+      <>
+        <RevealScreen murderer={murderer} onRestart={restart} />
+        <MusicPlayer isVideoPlaying={isVideoPlaying} />
+      </>
+    );
   }
 
-  return null;
+  return (
+    <>
+      <MusicPlayer isVideoPlaying={isVideoPlaying} />
+    </>
+  );
 }
 
 export default MurderMysteryApp;

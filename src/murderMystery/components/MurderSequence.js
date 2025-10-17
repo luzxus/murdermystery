@@ -9,7 +9,7 @@ const VIDEO_SCENES = [
   }
 ];
 
-export function MurderSequence({ onComplete }) {
+export function MurderSequence({ onComplete, onVideoStateChange }) {
   const [currentScene, setCurrentScene] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
   const videoRef = useRef(null);
@@ -23,6 +23,15 @@ export function MurderSequence({ onComplete }) {
       videoRef.current.play();
     }
   }, [currentScene, hasStarted]);
+
+  // Notify parent when video plays/pauses
+  const handlePlay = () => {
+    if (onVideoStateChange) onVideoStateChange(true);
+  };
+
+  const handlePause = () => {
+    if (onVideoStateChange) onVideoStateChange(false);
+  };
 
   const handleStart = () => {
     setHasStarted(true);
@@ -115,6 +124,8 @@ export function MurderSequence({ onComplete }) {
           key={currentVideo.id}
           className="w-full"
           onEnded={handleVideoEnd}
+          onPlay={handlePlay}
+          onPause={handlePause}
           controls
         >
           <source src={currentVideo.src} type="video/mp4" />

@@ -5,7 +5,15 @@ import { X } from 'lucide-react';
  * modal shown when all challenges are completed
  * shows butler_testimony.mp4 and leads into secrets round
  */
-export function ButlerTestimonyModal({ onClose }) {
+export function ButlerTestimonyModal({ onClose, onVideoStateChange }) {
+  const handlePlay = () => {
+    if (onVideoStateChange) onVideoStateChange(true);
+  };
+
+  const handlePause = () => {
+    if (onVideoStateChange) onVideoStateChange(false);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
       <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-black rounded-2xl shadow-2xl border-2 border-purple-500/30 max-w-4xl w-full overflow-hidden">
@@ -27,6 +35,9 @@ export function ButlerTestimonyModal({ onClose }) {
             src="/media/videos/intrigues/butler_testimony.mp4"
             controls
             autoPlay
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onEnded={handlePause}
             className="w-full"
           />
         </div>

@@ -5,7 +5,8 @@ export function VideoPanel({
   videoChallenges = [],
   selectedPlayers,
   onCompleteChallenge,
-  isUnlocked
+  isUnlocked,
+  onVideoStateChange
 }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showingVideo, setShowingVideo] = useState(false);
@@ -82,6 +83,7 @@ export function VideoPanel({
         <VideoModal
           challenge={selectedVideo}
           onClose={closeVideo}
+          onVideoStateChange={onVideoStateChange}
         />
       )}
     </div>
@@ -145,7 +147,15 @@ function VideoChallengeCard({ challenge, onComplete, onPlay }) {
   );
 }
 
-function VideoModal({ challenge, onClose }) {
+function VideoModal({ challenge, onClose, onVideoStateChange }) {
+  const handlePlay = () => {
+    if (onVideoStateChange) onVideoStateChange(true);
+  };
+
+  const handlePause = () => {
+    if (onVideoStateChange) onVideoStateChange(false);
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
@@ -175,6 +185,9 @@ function VideoModal({ challenge, onClose }) {
             src={challenge.videoPath}
             controls
             autoPlay
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onEnded={handlePause}
             className="w-full"
             style={{ maxHeight: '70vh' }}
           >

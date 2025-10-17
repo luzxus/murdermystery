@@ -7,7 +7,7 @@ export const BackgroundVideo = ({ className = '', overlay = true }) => (
       className="w-full h-full object-cover object-center brightness-[0.55] contrast-125 saturate-120"
       src={VIDEO_MANOR}
       autoPlay
-      muted
+      muted={true}
       loop
       playsInline
       preload="auto"

@@ -30,6 +30,7 @@ export function GameScreen({
   selectedPlayers,
   eliminatedPlayers,
   votingInProgress,
+  isFinalVote,
   silencedUntil,
   hintSuppressedUntil,
   submitDisabledUntil,
@@ -38,7 +39,8 @@ export function GameScreen({
   penaltyTick,
   videoChallenges,
   onCompleteVideoChallenge,
-  observations
+  observations,
+  onVideoStateChange
 }) {
   const [showChallengeModal, setShowChallengeModal] = useState(false);
   const indexLabel = `${currentIndex + 1} / ${totalChallenges}`;
@@ -147,6 +149,7 @@ export function GameScreen({
               onCancel={onCancelVoting}
               onFinish={onFinishVoting}
               feedback={feedback}
+              isFinalVote={isFinalVote}
             />
           </div>
         )}
@@ -164,6 +167,7 @@ export function GameScreen({
             videoChallenges={videoChallenges}
             onCompleteVideoChallenge={onCompleteVideoChallenge}
             isVideoUnlocked={isVideoTabUnlocked}
+            onVideoStateChange={onVideoStateChange}
           />
         </div>
       </div>
