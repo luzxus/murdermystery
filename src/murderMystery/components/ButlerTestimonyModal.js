@@ -45,11 +45,19 @@ export function ButlerTestimonyModal({ onClose, onVideoStateChange }) {
         {/* message */}
         <div className="p-6 bg-gradient-to-br from-slate-800 to-slate-900">
           <p className="text-white text-lg text-center mb-2">
-            Butler Ashford avslöjar avgörande information om en iakttagelse han gjort om Lord Sebastian några dagar innan.
+            Butler Ashford berättar om något han såg några dagar innan mordet.
           </p>
-          <p className="text-white/80 text-center">
-            Ni har nu samlat alla ledtrådar. Tid för hemlighetens rond.
-          </p>
+                <div className="space-y-4 mb-6">
+        <p className="text-gray-300 leading-relaxed">
+          Butler Ashford vittnar om att han hörde Lord Sebastian gå omkring i sitt rum sent på kvällen och mumla till sig själv:
+        </p>
+        <blockquote className="border-l-4 border-amber-500 pl-4 italic text-amber-200">
+          "Jag måste ha den oavsett vad, även om det innebär att bedra någon jag älskar."
+        </blockquote>
+        <p className="text-gray-300 leading-relaxed">
+          Vad menade Sebastian? Vem var det han älskade? Butlern såg också Dr. Arabella och Victor von Sterling prata tyst i korridoren strax efter mordet - verkade de samordna sina berättelser?
+        </p>
+      </div>
           <div className="mt-4 flex justify-center">
             <button
               onClick={onClose}

@@ -9,8 +9,13 @@ const PlayerCountSelector = ({ playerCount, setPlayerCount }) => (
       <button
         key={num}
         onClick={() => setPlayerCount(num)}
+        disabled={num < 5}
         className={`p-4 rounded-lg font-bold text-lg transition-all ${
-          playerCount === num ? 'bg-purple-600 text-white scale-110' : 'bg-white/10 text-gray-300'
+          playerCount === num 
+            ? 'bg-purple-600 text-white scale-110' 
+            : num < 5 
+            ? 'bg-gray-800 text-gray-600 cursor-not-allowed' 
+            : 'bg-white/10 text-gray-300 hover:bg-white/20'
         }`}
       >
         {num}

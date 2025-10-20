@@ -26,7 +26,7 @@ export const AmbientObservations = ({ items }) => {
       </div>
 
       {!isExpanded && items.length > 3 && (
-        <p className="text-[10px] text-slate-500 mt-2 ml-6">
+        <p className="text-[10px] text-slate-300 mt-2 ml-6">
           ... och {items.length - 3} till. Klicka för att visa alla.
         </p>
       )}

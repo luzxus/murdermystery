@@ -16,3 +16,4 @@
 • Make sure new code is written with immense caution, clarity, and accuracy.
 • Keep implementation plans and checklists kept in .md documents up to date when we work with them.
 • Under no circumstances change text content, labels, keys, ids, or any business logic – unless explicitly instructed to.
+* IMPORTANT: Ask me questions for clarification!

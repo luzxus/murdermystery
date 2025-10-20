@@ -28,20 +28,20 @@ export const challenges = [
   },
   {
     id: 3,
-    title: "Genomsök biblioteket",
-    description: "Lords dagbok innehåller en gåtfull ledtråd till ett gömt föremål: 'I templets svala salar, där den kransade guden vakar, vilar bekännelsen i skuggan av Bourgogne och Toscana.",
-    puzzle: "Följ ledtrådarna och hitta föremålet...\n\n'Den kransade guden' - 'nektarens buteljer' - 'Bourgogne och Toscana'\n\nVar ska ni leta?",
-    hint: "Fundera över symboliken.",
-    answer: "PIPA",
-    acceptedAnswers: ["PIPA", "TRAPIPA", "TRÄPIPA", "EN PIPA", "PIPAN", "RÖKPIPA"],
-    instruction: "Vad för typ av föremål hittade ni?",
+    title: "Undersök Professorns laboratorium",
+    description: "En brännmärkt laboratoriejournal har hittats bland Professorns papper. Texten är delvis förstörd men några avgörande rader går att läsa.",
+    puzzle: "Journalen är svårt skadad av vätska och värme, men följande text kan urskiljas:\n\n'...Experiment T-47: Sömnmedel\nDos: 5 droppar för normal sömn\nOBS: 15 droppar+ DÖDLIGT vid alkohol\nLeveransdatum: [suddigt]\nBeställare: [bränt bort]'\n\nNär ni försöker läsa mer faller journalen isär i händerna på er.\n",
+    hint: "Fundera på doseringen och kopplingen till romerska siffror. Vad är den dödliga dosen och hur skrivs den med romerska siffror?",
+    answer: "XVII",
+    acceptedAnswers: ["XVII", "xvii", "17 med romerska siffror"],
+    instruction: "Hur skriver man 17 med romerska siffror?",
     type: "investigation",
     timeLimit: 10,
-    difficulty: "Medel",
+    difficulty: "Lätt",
     prop: {
-      item: "Träpipa (från Butterick's, ca 80-100kr)",
-      location: "",
-      clue: "Kan ha en lapp: 'Min närmaste konfident visste för mycket. Jag betalade priset. - S.H.'"
+      item: "Brännmärkt laboratoriejournal (skriv ut från dator)",
+      location: "Gömd bland Professorns papper i studiet",
+      clue: "Visar att Professorn blandade ett experiment sömnmedel (T-47) som blir dödligt vid alkohol. Beställarens namn är bränt bort - men någon beställde detta."
     }
   },
   {
@@ -61,15 +61,38 @@ export const challenges = [
   },
   {
     id: 5,
-    title: "Undersök kemikalieflaskan",
-    description: "En mystisk glasflaska har hittats nära biblioteket. Den innehåller rester av en okänd kemikalie och har ett partiellt etikett.",
-    puzzle: "På flaskan finns en delvis bortsliten etikett:\n\n'HC-__ VARNING: CY__ID\nFörvaring: -2_°C\nTillverkad: [datum suddigt]\nURSPRUNG: ______valv'\n\nButlerns vittnesberättelse:\n'Strax efter midnatt, när jag gick min vanliga runda runt herrgården, såg jag något gnistra i buskagen utanför biblioteksfönstret. När jag undersökte hittade jag denna flaska, gömd under löv. Den var fortfarande kall i handen. Någon måste ha gömt den där under kvällen.'\n\nVilken typ av plats slutar på '-valv' och kan ha varit ursprunget?",
-    hint: "Tänk på platser i en herrgård där man skulle förvara kemikalier. Vilken typ av rum finns under markplan och har rätt temperatur för känsliga ämnen?",
-    answer: "KÄLLARVALV",
-    acceptedAnswers: ["KÄLLARVALV", "KALLARVALV", "KÄLLAREN", "KÄLLARVALVET", "KALLARVALVET", "LABORATORIEVALV", "LABORATORIET"],
-    instruction: "Varifrån kom kemikalieflaskan ursprungligen?",
-    type: "investigation",
+    title: "Gåtan på skrivbordet",
+    description: "På Sebastians skrivbord ligger en lapp med en gåta skriven.",
+    puzzle: "Jag har händer men kan inte greppa. Jag visar tiden men kan inte tala. Vad är jag?",
+    hint: "Tänk på något som finns på de flesta skrivbord och som har både stora och små visare.",
+    answer: "klockur",
+    acceptedAnswers: ["klockur", "klocka", "ur"],
+    instruction: "Vad är svaret på gåtan?",
+    type: "riddle",
     timeLimit: 10,
-    difficulty: "Medel"
-  }
+    difficulty: "Lätt",
+    prop: {
+      item: "Lapp med gåta",
+      location: "På Sebastians skrivbord",
+      clue: "En gåta som leder till ett klockur, vilket kan ha betydelse för tidslinjen i berättelsen."
+    }
+  },
+ /*  {
+    id: 6,
+    title: "Förhör Butlern",
+    description: "Butler Ashford har viktig information om vad han hörde natten till mordet. Han verkar tveksam att dela med sig...",
+    puzzle: "Butlern berättar:\n\n'Jag hörde Victor von Sterling prata med sig själv i korridoren strax före middagen. Han verkade stressad och sa något i stil med:\n\n\"Jag har så svårt att sova... det enda som hjälpt är att dricka mig berusad. Skulden har varit svår att hantera.\"\n\nVad tror ni Victor menade med 'skulden'?'\n\nButlern ger tre alternativ:\nA) Ekonomisk skuld (pengar)\nB) Moralisk skuld (samvete)\nC) Båda två\n\nVad tror ni är rätt?",
+    hint: "Victor har spelat poker med Sebastian och förlorat stora summor. Men han sa också 'skulden har varit svår att hantera' - är det bara pengar han pratar om?",
+    answer: "C",
+    acceptedAnswers: ["C", "BÅDA", "BÅDA TVÅ", "BÅDATVÅ", "BÅDE OCH", "EKONOMISK OCH MORALISK"],
+    instruction: "Vilket alternativ väljer ni? (A, B eller C)",
+    type: "investigation",
+    timeLimit: 8,
+    difficulty: "Lätt",
+    prop: {
+      item: "Butlerns vittnesberättelse (ingen fysisk prop)",
+      location: "Förhör med Butler Ashford",
+      clue: "Visar att Victor hade både ekonomiska problem OCH något på sitt samvete. Varför sa han att han 'dricker sig berusad' för att hantera 'skulden'?"
+    }
+  } */
 ];

@@ -20,7 +20,7 @@ export const RedHerringToast = ({ item, onDone, duration = 6000 }) => {
         <div className="flex-1">
           <p className="text-xs tracking-wide uppercase text-purple-400 font-semibold">Ny observation</p>
           <p className="text-sm leading-snug text-slate-100 mt-1">{item.text}</p>
-          <p className="mt-2 text-[10px] text-slate-500 italic">Kan vara irrelevant – eller inte.</p>
+          <p className="mt-2 text-[10px] text-slate-300 italic">Kan vara irrelevant – eller inte.</p>
         </div>
       </div>
       <div className="h-1 w-full bg-slate-700 relative overflow-hidden">

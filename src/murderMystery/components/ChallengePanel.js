@@ -126,7 +126,7 @@ export function CluesList({ clues, unlockedClues, deepAnalyses = [], onAnalyzeCl
           >
             <div className="flex justify-between mb-3">
               <h3 className="font-bold text-white">{clue.title}</h3>
-              {unlockedClues.includes(clue.id) ? <Unlock className="w-5 h-5 text-green-400" /> : <Lock className="w-5 h-5 text-gray-500" />}
+              {unlockedClues.includes(clue.id) ? <Unlock className="w-5 h-5 text-green-400" /> : <Lock className="w-5 h-5 text-gray-400" />}
             </div>
             {unlockedClues.includes(clue.id) ? (
               <>

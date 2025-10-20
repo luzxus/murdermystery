@@ -18,6 +18,8 @@ import { RevealScreen } from './components/RevealScreen';
 import { ConversationPrompts } from './components/ConversationPrompts';
 import { VideoUnlockModal } from './components/VideoUnlockModal';
 import { ButlerTestimonyModal } from './components/ButlerTestimonyModal';
+import { InterrogationModal } from './components/InterrogationModal';
+import { InterrogationResultModal } from './components/InterrogationResultModal';
 import { useRedHerrings } from './hooks/useRedHerrings';
 import { useConversationPrompts } from './hooks/useConversationPrompts';
 import { MusicPlayer } from './components/MusicPlayer';
@@ -31,13 +33,11 @@ export function MurderMysteryApp() {
   const [murderer, setMurderer] = useState(null);
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [unlockedClues, setUnlockedClues] = useState([]);
-  const [deepAnalyses, setDeepAnalyses] = useState([]); // clue ids whose deepHint is revealed
   const [videoChallenges, setVideoChallenges] = useState(initialVideoChallenges);
   // Consequence / penalty system state
   const [silencedUntil, setSilencedUntil] = useState({}); // {characterId: timestamp}
   const [hintSuppressedUntil, setHintSuppressedUntil] = useState(0);
   const [submitDisabledUntil, setSubmitDisabledUntil] = useState(0);
-  const [lockedDeepHints, setLockedDeepHints] = useState([]); // clue ids that can no longer be deep analyzed (if not already)
   const [consequenceMessages, setConsequenceMessages] = useState([]); // recent consequence descriptions
   const [penaltyTick, setPenaltyTick] = useState(0); // internal ticker for countdowns
   const [userAnswer, setUserAnswer] = useState('');
@@ -55,13 +55,19 @@ export function MurderMysteryApp() {
   const [hasShownVideoUnlock, setHasShownVideoUnlock] = useState(false);
   const [showButlerTestimony, setShowButlerTestimony] = useState(false);
   const [isFinalVote, setIsFinalVote] = useState(false);
+  // Interrogation system
+  const [showInterrogationModal, setShowInterrogationModal] = useState(false);
+  const [interrogationsUsed, setInterrogationsUsed] = useState(0);
+  const [interrogationResult, setInterrogationResult] = useState(null);
+  const MAX_INTERROGATIONS = 3;
   // Suspicion tracking (placeholder simple heuristic)
   const suspicionMapRef = useRef({}); // characterId -> score
   const lastClueTagsRef = useRef([]);
   const forceRender = useState(0)[1]; // trigger rerender for suspicion updates
 
-  // Force murderer to be Dr Arabella (id 6) for redesigned narrative
-  // If she isn't in selected players (few players), fallback to random.
+  // Force murderer to be Victor von Sterling (id 2) for plot twist narrative
+  // Arabella (id 6) looks guilty early but is actually innocent.
+  // If Victor isn't in selected players (few players), fallback to random.
 
   // Timer effect
   useEffect(() => {
@@ -83,10 +89,28 @@ export function MurderMysteryApp() {
 
   // Actions
   const distributeRoles = () => {
-    const selected = shuffle(personas).slice(0, playerCount);
+    // Always include these 5 core characters
+    const coreCharacters = [
+      personas.find(p => p.id === 1), // Inspektör Reginald Blackwood
+      personas.find(p => p.id === 2), // Victor von Sterling
+      personas.find(p => p.id === 4), // Professor Edmund Thornbury
+      personas.find(p => p.id === 5), // Maximillian Max Goldstein
+      personas.find(p => p.id === 6), // Dr. Arabella Cogsworth
+    ].filter(Boolean);
+
+    // If more than 5 players, add random additional characters
+    let selected = [...coreCharacters];
+    if (playerCount > 5) {
+      const remaining = personas.filter(p => ![1, 2, 4, 5, 6].includes(p.id));
+      const additional = shuffle(remaining).slice(0, playerCount - 5);
+      selected = shuffle([...selected, ...additional]);
+    } else {
+      selected = shuffle(selected);
+    }
+
     setSelectedPlayers(selected);
-    const arabella = selected.find(p => p.id === 6);
-    setMurderer(arabella || pickRandom(selected));
+    const victor = selected.find(p => p.id === 2);
+    setMurderer(victor || pickRandom(selected));
     setScreen(Screens.DICE_ROLL);
   };
 
@@ -102,7 +126,7 @@ export function MurderMysteryApp() {
   const getSuspicionMap = () => suspicionMapRef.current;
 
   const { observations, registerRealClue, maybeInject } = useRedHerrings({
-    murdererId: 6,
+    murdererId: 2, // Victor von Sterling
     getPhase,
     getLastClueTags,
     getSuspicionMap,
@@ -151,17 +175,20 @@ export function MurderMysteryApp() {
         // Apply suspicion scoring based on clue definition
         const clue = clues.find(c => c.id === challenge.id);
         if (clue && clue.suspicionWeight) {
-          // Primary always Dr Arabella (id 6) per narrative
-            suspicionMapRef.current[6] = (suspicionMapRef.current[6] || 0) + (clue.suspicionWeight.primary || 0);
+          // suspicion tracking uses clue's primary/secondary weights
+          // early clues point at Arabella (id 6), later clues point at Victor (id 2)
+          const primaryId = clue.tags.includes('källarvalv') ? 6 : (clue.tags.includes('skuld') || clue.tags.includes('beställning')) ? 2 : 6;
+          suspicionMapRef.current[primaryId] = (suspicionMapRef.current[primaryId] || 0) + (clue.suspicionWeight.primary || 0);
           // Secondary heuristic mapping
           const sec = clue.suspicionWeight.secondary || 0;
           if (sec > 0) {
             let secondaryId = null;
             const tags = [...(clue.tags||[]), ...(clue.misdirectionTags||[])];
-            if (tags.some(t => ['professor','akademiskt'].includes(t))) secondaryId = 4;
+            if (tags.some(t => ['professor','akademiskt','sömnmedel'].includes(t))) secondaryId = 4;
             else if (tags.some(t => ['industri','ekonomi'].includes(t))) secondaryId = 5;
             else if (tags.some(t => ['detektiv'].includes(t))) secondaryId = 1;
-            else secondaryId = allPersonas.find(p => p.id !== 6)?.id;
+            else if (tags.some(t => ['nervositet','skuld'].includes(t))) secondaryId = 2;
+            else secondaryId = allPersonas.find(p => p.id !== primaryId)?.id;
             if (secondaryId) {
               suspicionMapRef.current[secondaryId] = (suspicionMapRef.current[secondaryId] || 0) + sec;
             }
@@ -209,17 +236,29 @@ export function MurderMysteryApp() {
     }
     const accusedPlayer = selectedPlayers.find(p => p.id === votes.group);
 
-    // Check if they accused the murderer (Dr. Arabella)
-    if (accusedPlayer.id === murderer.id) {
+    // Check if they accused Victor (the murderer) or Arabella (accomplice)
+    if (accusedPlayer.id === 2) {
+      // Victor is the murderer - they win!
       setShowVotingPanel(false);
       setIsFinalVote(false);
       setScreen(Screens.REVEAL);
+    } else if (accusedPlayer.id === 6) {
+      // Arabella is accomplice - they lose but get special message
+      setShowVotingPanel(false);
+      setFeedback({
+        type: 'error',
+        message: `${accusedPlayer.name} var medhjälpare, men Victor von Sterling - den verkliga mördaren - går fri! NI FÖRLORADE!`
+      });
+      setTimeout(() => {
+        setScreen(Screens.REVEAL);
+        setIsFinalVote(false);
+      }, 5000);
     } else if (isFinalVote) {
       // FINAL VOTE: If wrong, they lose - game over
       setShowVotingPanel(false);
       setFeedback({
         type: 'error',
-        message: `${accusedPlayer.name} var OSKYLDIG! NI FÖRLORADE! Dr. Arabella och Victor von Sterling går fria från mordet...`
+        message: `${accusedPlayer.name} var OSKYLDIG! NI FÖRLORADE! Victor von Sterling och Dr. Arabella går fria från mordet...`
       });
       setTimeout(() => {
         setScreen(Screens.REVEAL);
@@ -247,19 +286,24 @@ export function MurderMysteryApp() {
     );
   };
 
-  const restart = () => {
+  const handleInterrogate = (personId) => {
+    const person = selectedPlayers.find(p => p.id === personId);
+    if (person) {
+      setInterrogationResult({ person });
+      setInterrogationsUsed(prev => prev + 1);
+      setShowInterrogationModal(false);
+    }
+  };  const restart = () => {
     setScreen(Screens.SETUP);
     setPlayerCount(5);
     setSelectedPlayers([]);
     setMurderer(null);
     setCurrentChallenge(0);
     setUnlockedClues([]);
-    setDeepAnalyses([]);
     setVideoChallenges(initialVideoChallenges);
     setSilencedUntil({});
     setHintSuppressedUntil(0);
     setSubmitDisabledUntil(0);
-    setLockedDeepHints([]);
     setConsequenceMessages([]);
     setUserAnswer('');
     setShowHint(false);
@@ -271,6 +315,8 @@ export function MurderMysteryApp() {
     setShowVideoUnlockModal(false);
     setHasShownVideoUnlock(false);
     setShowButlerTestimony(false);
+    setInterrogationsUsed(0);
+    setInterrogationResult(null);
     suspicionMapRef.current = {};
   };
 
@@ -309,88 +355,6 @@ export function MurderMysteryApp() {
       forceRender(x => x + 1);
     }
   }, [observations, forceRender]);
-
-  // Deep analysis action (Feature 1): reveals deepHint at time cost
-  const analyzeClue = (clueId) => {
-    if (deepAnalyses.includes(clueId)) return;
-    const clue = clues.find(c => c.id === clueId);
-    if (!clue || !clue.deepHint) return;
-    if (lockedDeepHints.includes(clueId)) return; // locked by previous consequence
-    setDeepAnalyses(prev => [...prev, clueId]);
-    // trigger conversation prompt for deep analysis
-    triggerPrompt('deep_analysis');
-    // Apply random hidden consequence
-    applyRandomConsequence(clueId);
-  };
-
-  // Random consequence generator for deep analysis.
-  const applyRandomConsequence = (sourceClueId) => {
-    const activePlayersPool = selectedPlayers.filter(p => !eliminatedPlayers.includes(p.id));
-    const now = Date.now();
-    const consequencePool = [
-      {
-        type: 'silence_player',
-        weight: 1,
-        run: () => {
-          if (!activePlayersPool.length) return null;
-            const picked = pickRandom(activePlayersPool);
-            const durationMs = 120000; // 2 min
-            setSilencedUntil(prev => ({ ...prev, [picked.id]: now + durationMs }));
-            return `Konsekvens: ${picked.name} drabbas av intensiv huvudvärk och måste vara tyst i 2 minuter.`;
-        }
-      },
-      {
-        type: 'disable_hint',
-        weight: 0.9,
-        run: () => {
-          const durationMs = 90000; // 90s
-          setHintSuppressedUntil(now + durationMs);
-          return 'Konsekvens: Hint-systemet överbelastas och kan inte användas på ~90 sekunder.';
-        }
-      },
-      {
-        type: 'lock_submit',
-        weight: 0.8,
-        run: () => {
-          const durationMs = 30000; // 30s
-          setSubmitDisabledUntil(now + durationMs);
-          return 'Konsekvens: Kognitiv paralysering – svarsknappen är låst i 30 sekunder.';
-        }
-      },
-      {
-        type: 'lock_future_deep',
-        weight: 0.7,
-        run: () => {
-          const remaining = clues.filter(c => !deepAnalyses.includes(c.id) && c.id !== sourceClueId && c.deepHint && !lockedDeepHints.includes(c.id));
-          if (!remaining.length) return 'Konsekvens: Överhettning – ingen framtida analys påverkas (inget att låsa).';
-          const pickedClue = pickRandom(remaining);
-          setLockedDeepHints(prev => [...prev, pickedClue.id]);
-          return `Konsekvens: Analysutrustning skadad – fördjupad analys låses permanent för "${pickedClue.title}".`;
-        }
-      },
-      {
-        type: 'inject_red_herring',
-        weight: 1,
-        run: () => {
-          maybeInject('analysisFallout');
-          return 'Konsekvens: Sensorisk artefakt – en tvetydig observation dyker upp.';
-        }
-      }
-    ];
-    // Weighted pick (simple proportional)
-    const totalW = consequencePool.reduce((a,c)=>a+c.weight,0);
-    let r = Math.random() * totalW;
-    let chosen = consequencePool[0];
-    for (const c of consequencePool) { r -= c.weight; if (r <= 0) { chosen = c; break; } }
-    const msg = chosen.run();
-    if (msg) {
-      setConsequenceMessages(m => [...m.slice(-3), { id: `${chosen.type}_${now}`, text: msg, ts: now }]);
-    }
-    setFeedback({ type: 'info', message: 'Fördjupad analys lyckades. En konsekvens utlöstes.' });
-    setTimeout(() => {
-      setFeedback(f => (f && f.type === 'info' ? null : f));
-    }, 3500);
-  };
 
   // Penalty ticker to update countdowns visually
   useEffect(() => {
@@ -485,8 +449,6 @@ export function MurderMysteryApp() {
           timeRemaining={timeRemaining}
           unlockedClues={unlockedClues}
           clues={clues}
-          deepAnalyses={deepAnalyses}
-          onAnalyzeClue={analyzeClue}
           startVoting={startVoting}
           showVotingPanel={showVotingPanel}
           onCancelVoting={() => { setShowVotingPanel(false); setVotingInProgress(false); setVotes({}); setIsFinalVote(false); }}
@@ -501,13 +463,14 @@ export function MurderMysteryApp() {
           silencedUntil={silencedUntil}
           hintSuppressedUntil={hintSuppressedUntil}
           submitDisabledUntil={submitDisabledUntil}
-          lockedDeepHints={lockedDeepHints}
           consequenceMessages={consequenceMessages}
           penaltyTick={penaltyTick}
           videoChallenges={videoChallenges}
           onCompleteVideoChallenge={completeVideoChallenge}
           observations={observations}
           onVideoStateChange={setIsVideoPlaying}
+          interrogationsRemaining={MAX_INTERROGATIONS - interrogationsUsed}
+          onOpenInterrogation={() => setShowInterrogationModal(true)}
         />
         <div className="max-w-6xl mx-auto px-4 relative">
           {/* Conversation prompts layer */}
@@ -531,6 +494,21 @@ export function MurderMysteryApp() {
               setScreen(Screens.SECRETS);
             }}
             onVideoStateChange={setIsVideoPlaying}
+          />
+        )}
+        {/* Interrogation modals */}
+        {showInterrogationModal && (
+          <InterrogationModal
+            selectedPlayers={selectedPlayers}
+            interrogationsRemaining={MAX_INTERROGATIONS - interrogationsUsed}
+            onClose={() => setShowInterrogationModal(false)}
+            onInterrogate={handleInterrogate}
+          />
+        )}
+        {interrogationResult && (
+          <InterrogationResultModal
+            person={interrogationResult.person}
+            onClose={() => setInterrogationResult(null)}
           />
         )}
         <MusicPlayer isVideoPlaying={isVideoPlaying} />

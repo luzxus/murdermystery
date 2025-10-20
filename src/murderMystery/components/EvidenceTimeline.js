@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Search, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import ScienceIcon from '@mui/icons-material/Science';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import StarIcon from '@mui/icons-material/Star';
@@ -22,9 +20,6 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 export function EvidenceTimeline({
   clues = [],
   unlockedClues = [],
-  deepAnalyses = [],
-  onAnalyzeClue,
-  lockedDeepHints = [],
   selectedPlayers = [],
   observations = [],
   videoChallenges = [],
@@ -98,9 +93,9 @@ export function EvidenceTimeline({
   if (allItems.length === 0) {
     return (
       <div className="text-center py-16">
-        <Lock className="w-20 h-20 mx-auto text-slate-600 mb-4" />
+        <Lock className="w-20 h-20 mx-auto text-slate-400 mb-4" />
         <p className="text-slate-400 text-lg font-semibold">Ingen information insamlad än</p>
-        <p className="text-slate-500 text-sm mt-2">
+        <p className="text-slate-300 text-sm mt-2">
           Utför din första utredningsaktion för att samla bevis
         </p>
       </div>
@@ -153,7 +148,7 @@ export function EvidenceTimeline({
       {/* Content */}
       <div className="space-y-4">
         {filteredItems.length === 0 ? (
-          <div className="text-center py-12 text-slate-500">
+          <div className="text-center py-12 text-slate-300">
             <p>Inga {activeTab === 'evidence' ? 'bevis' : activeTab === 'videos' ? 'videor' : 'händelser'} tillgängliga än</p>
           </div>
         ) : (
@@ -162,9 +157,6 @@ export function EvidenceTimeline({
               return <ClueCard
                 key={item.id}
                 clue={item.data}
-                deepAnalyses={deepAnalyses}
-                lockedDeepHints={lockedDeepHints}
-                onAnalyze={() => onAnalyzeClue(item.data.id)}
               />;
             } else if (item.type === 'observation') {
               return <ObservationCard key={item.id} observation={item.data} />;
@@ -194,7 +186,7 @@ function TabButton({ active, onClick, icon, label, count, disabled }) {
         active
           ? 'bg-purple-600 text-white shadow-lg scale-105'
           : disabled
-          ? 'bg-slate-800/50 text-slate-600 cursor-not-allowed'
+          ? 'bg-slate-800/50 text-slate-400 cursor-not-allowed'
           : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 hover:text-white'
       }`}
     >
@@ -213,11 +205,7 @@ function TabButton({ active, onClick, icon, label, count, disabled }) {
   );
 }
 
-function ClueCard({ clue, deepAnalyses, lockedDeepHints, onAnalyze }) {
-  const isAnalyzed = deepAnalyses.includes(clue.id);
-  const hasDeepHint = clue.deepHint && clue.deepHint.trim().length > 0;
-  const isLocked = lockedDeepHints.includes(clue.id);
-
+function ClueCard({ clue }) {
   return (
     <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-2 border-green-500/30 rounded-xl p-5 shadow-lg hover:shadow-green-500/20 transition-all">
       {/* Header */}
@@ -260,41 +248,10 @@ function ClueCard({ clue, deepAnalyses, lockedDeepHints, onAnalyze }) {
       <div className="bg-green-950/40 border-l-4 border-green-500 p-3 mb-3 rounded">
         <p className="text-green-200 text-sm leading-relaxed">
           <strong className="text-green-400 flex items-center gap-1">
-            <LockOpenIcon sx={{ fontSize: 16 }} /> Initial Analys:
+            <LockOpenIcon sx={{ fontSize: 16 }} /> Analys:
           </strong> {clue.unlock}
         </p>
       </div>
-
-      {/* Deep Analysis Section */}
-      {hasDeepHint && (
-        <div className="mt-3 pt-3 border-t border-green-900/30">
-          {isAnalyzed ? (
-            <div className="bg-purple-950/40 border-l-4 border-purple-500 p-3 rounded">
-              <p className="text-purple-200 text-sm leading-relaxed">
-                <strong className="text-purple-400 flex items-center gap-1">
-                  <ScienceIcon sx={{ fontSize: 16 }} /> Fördjupad Analys:
-                </strong> {clue.deepHint}
-              </p>
-            </div>
-          ) : isLocked ? (
-            <div className="bg-red-950/30 border-2 border-red-600/30 p-3 rounded flex items-center gap-2">
-              <Lock className="w-4 h-4 text-red-400" />
-              <span className="text-sm text-red-300 font-semibold">
-                Fördjupad analys permanent låst (tidigare konsekvens)
-              </span>
-            </div>
-          ) : (
-            <button
-              onClick={onAnalyze}
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white py-3 px-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-            >
-              <Search className="w-5 h-5" />
-              Utför Fördjupad Analys
-              <WarningAmberIcon sx={{ fontSize: 20 }} className="text-yellow-300" />
-            </button>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -312,7 +269,7 @@ function ObservationCard({ observation }) {
               OBSERVATION
             </span>
             {observation.timestamp && (
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-slate-300">
                 {new Date(observation.timestamp).toLocaleTimeString('sv-SE')}
               </span>
             )}
@@ -399,7 +356,7 @@ function VideoCard({ video, selectedPlayers, onComplete, onVideoStateChange }) {
               </div>
               <h4 className="font-bold text-white mb-2">{video.title}</h4>
               <p className="text-slate-400 text-sm mb-2">{video.description}</p>
-              <p className="text-slate-500 text-xs italic">
+              <p className="text-slate-300 text-xs italic">
                 Karaktär: {video.characterName}
               </p>
             </div>

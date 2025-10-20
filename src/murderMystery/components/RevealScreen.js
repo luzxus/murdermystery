@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Skull } from 'lucide-react';
 import { MANOR_STILL } from '../constants';
 
-export function RevealScreen({ murderer, onRestart }) {
+const MURDER_VIDEO_PATH = '/media/videos/arabella_sebastian_whiskey.mp4';
+
+export function RevealScreen({ murderer, onRestart, didWin = true }) {
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoWatched, setVideoWatched] = useState(false);
+
   return (
     <div
       className="min-h-screen relative bg-gradient-to-br from-slate-900/85 via-red-900/60 to-slate-900/85 p-8"
@@ -31,8 +36,9 @@ export function RevealScreen({ murderer, onRestart }) {
           <div className="bg-black/40 p-6 rounded-lg mb-8 text-left">
             <h3 className="text-xl font-bold text-white mb-3">Hela sanningen:</h3>
             <p className="text-gray-300">
-              Under cocktailtimmen smög {murderer.name} in i biblioteket medan alla andra var sysselsatta. 
-              Med kunskap om cyanid och tillgång till kemikalier hällde mördaren giftet i Lords whisky. 
+              Dr. Arabella Cogsworth och Victor von Sterling samarbetade för att utföra mordet.
+              Dr. Arabella framställde giftet med sin kunskap om cyanid och tillgång till kemikalier.
+              Victor hällde sedan det i whiskeyflaskan som Arabella överlämnade till Lord Sebastian.
               <br /><br />
               Vid 22:15 drack Lord Sebastian sin sista drink. Cyaniden verkade på sekunder.
               <br /><br />
@@ -40,6 +46,32 @@ export function RevealScreen({ murderer, onRestart }) {
                 Ledtråden som kunde avslöja: {murderer.secretClue}
               </strong>
             </p>
+          </div>
+
+          {/* Video reveal section */}
+          <div className="bg-gradient-to-br from-purple-900/40 to-red-900/40 border-2 border-purple-500/50 rounded-xl p-6 mb-8">
+            <h3 className="text-2xl font-bold text-white mb-3 text-center">🎬 Vad hände egentligen?</h3>
+            <p className="text-gray-300 text-center mb-4">
+              Se den avgörande scenen strax innan mordet - när Arabella överlämnar den giftiga whiskeyflaskan till Lord Sebastian.
+            </p>
+            {!showVideo ? (
+              <button
+                onClick={() => setShowVideo(true)}
+                className="w-full bg-gradient-to-r from-red-600 to-purple-600 text-white py-4 px-6 rounded-lg font-bold hover:scale-105 transition-transform"
+              >
+                📽️ Visa mordscenen
+              </button>
+            ) : (
+              <div className="bg-black rounded-lg overflow-hidden">
+                <video
+                  src={MURDER_VIDEO_PATH}
+                  controls
+                  autoPlay
+                  className="w-full"
+                  onEnded={() => setVideoWatched(true)}
+                />
+              </div>
+            )}
           </div>
 
           <button

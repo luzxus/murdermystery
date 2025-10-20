@@ -18,8 +18,6 @@ export function GameScreen({
   timeRemaining,
   unlockedClues,
   clues,
-  deepAnalyses,
-  onAnalyzeClue,
   startVoting,
   showVotingPanel,
   onCancelVoting,
@@ -34,13 +32,14 @@ export function GameScreen({
   silencedUntil,
   hintSuppressedUntil,
   submitDisabledUntil,
-  lockedDeepHints,
   consequenceMessages,
   penaltyTick,
   videoChallenges,
   onCompleteVideoChallenge,
   observations,
-  onVideoStateChange
+  onVideoStateChange,
+  interrogationsRemaining,
+  onOpenInterrogation
 }) {
   const [showChallengeModal, setShowChallengeModal] = useState(false);
   const indexLabel = `${currentIndex + 1} / ${totalChallenges}`;
@@ -126,7 +125,19 @@ export function GameScreen({
 
           {/* Accusation Button */}
           {!votingInProgress && (
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={onOpenInterrogation}
+                disabled={interrogationsRemaining === 0}
+                className={`${
+                  interrogationsRemaining > 0
+                    ? 'bg-amber-600 hover:bg-amber-700'
+                    : 'bg-gray-600 cursor-not-allowed'
+                } text-white px-6 py-3 rounded-xl font-bold flex items-center gap-3 transition-all hover:scale-105 shadow-2xl`}
+              >
+                <Users className="w-6 h-6" />
+                FÖRHÖR ({interrogationsRemaining}/3)
+              </button>
               <button
                 onClick={startVoting}
                 className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold flex items-center gap-3 transition-all hover:scale-105 shadow-2xl"
@@ -159,9 +170,6 @@ export function GameScreen({
           <EvidenceTimeline
             clues={clues}
             unlockedClues={unlockedClues}
-            deepAnalyses={deepAnalyses}
-            onAnalyzeClue={onAnalyzeClue}
-            lockedDeepHints={lockedDeepHints}
             selectedPlayers={selectedPlayers}
             observations={observations}
             videoChallenges={videoChallenges}
@@ -246,9 +254,6 @@ function ConsequenceBanner({ silencedUntil, hintSuppressedUntil, submitDisabledU
               <div>
                 <p className="text-white font-bold text-lg">
                   {consequence.icon} {consequence.text}
-                </p>
-                <p className="text-white/80 text-sm">
-                  Varje fördjupad analys har oförutsedda konsekvenser
                 </p>
               </div>
             </div>

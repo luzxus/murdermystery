@@ -43,7 +43,7 @@ export function MusicPlayer({ isVideoPlaying }) {
         audio.pause();
       }
     };
-  }, []);
+  }, [isPlaying]);
 
   // Pause/resume based on video playing
   useEffect(() => {

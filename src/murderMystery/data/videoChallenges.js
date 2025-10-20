@@ -51,10 +51,26 @@ export const videoChallenges = [
     completed: false
   },
   {
+    id: 'victor-arabella-whiskey',
+    characterId: 2, // Victor von Sterling (can also be 6 for Arabella)
+    characterName: 'Victor von Sterling & Dr. Arabella',
+    videoPath: '/media/videos/intrigues/victor_arabella_whiskey.mp4',
+    title: 'Den Hemliga Gåvan',
+    description: 'Victor ger Arabella något diskret - en flaska. Vad innehåller den egentligen?',
+    challenge: {
+      title: 'Gåvans Hemlighet',
+      instructions: 'Victor eller Arabella måste ge en annan spelare en "gåva" (vilket föremål som helst från bordet) och övertyga dem om att ta emot den genom att hitta på en historia om varför gåvan är viktig (60 sekunder).',
+      alternativeInstructions: 'Alternativ: Victor och Arabella måste samarbeta för att lösa en enkel utmaning tillsammans (t.ex. bygga något, skapa en historia tillsammans) på 90 sekunder - testas deras samarbete.'
+    },
+    suspicionImpact: 'Visar koppling mellan Victor och Arabella - arbetade de tillsammans?',
+    unlocked: false,
+    completed: false
+  },
+  {
     id: 'arabella-blueprints',
     characterId: 6, // Dr. Arabella Cogsworth
     characterName: 'Dr. Arabella Cogsworth',
-    videoPath: '/media/videos/intrigues/arabella-showing-sebastian-blueprints.mp4',
+    videoPath: '/media/videos/intrigues/drarabella_showcase_blueprint.mp4',
     title: 'Uppfinningen',
     description: 'En interaktion mellan Dr Arabella och Sebastian. Något väcker hans intresse...',
     challenge: {
@@ -102,7 +118,7 @@ export const videoChallenges = [
     id: 'max-whiskey-stress',
     characterId: 5, // Maximilian 'Max' Goldstein
     characterName: 'Maximilian "Max" Goldstein',
-    videoPath: '/media/videos/intrigues/maximilan-office-whiskey-stressed.mp4',
+    videoPath: '/media/videos/intrigues/maximilian_office_talk.mp4',
     title: 'Nervös Hantering',
     description: 'Max observeras ensam i studiet. Hans beteende verkar misstänkt nervöst...',
     challenge: {

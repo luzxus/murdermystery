@@ -20,7 +20,7 @@ export const personas = [
       weakness: "Kan bli utröstad om ALLA spelare är helt eniga - då måste en ny inspektör röstas fram"
     },
     // new roleplay depth fields
-    personalGoal: "Lösa mordet och identifiera den verkliga mördaren (Dr. Arabella). Använd din veto-rätt strategiskt för att skydda oskyldiga eller avslöja sanningen.",
+    personalGoal: "Lösa mordet och identifiera den verkliga mördaren (Victor von Sterling) och hans medhjälpare (Dr. Arabella). Ledtrådarna kommer peka åt olika håll - var metodisk. Använd din veto-rätt strategiskt för att skydda oskyldiga eller avslöja sanningen.",
     specialPower: "VETO-RÄTT: Du kan stoppa EN omröstning per spel. Använd den klokt. OBS: Du kan bara röstas ut om ALLA spelare är helt eniga. Om du röstas ut ärver nästa valda inspektör din veto-rätt.",
     relationships: {
       allies: [4], // professor thornbury - delar intresse för brottsanalys
@@ -48,31 +48,31 @@ export const personas = [
     profileImage: "/media/images/profiles/victor-von-sterling.png",
     personality: "Charmig och optimistisk.",
     background: "Förlorade familjeförmögenheten men håller skenet uppe.",
-    secret: "Är medbrottsling till Dr. Arabella i mordet på Lord Sebastian. Hjälpte henne utföra mordet och skyddar henne från misstankar.",
-    secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst. Sågs argumentera hetsigt med Lord Sebastian tidigare under kvällen. Verkar ovanligt beskyddande av Dr. Arabella.",
-    murdererMotive: "Du är MEDBROTTSLING till Dr. Arabella. Ni samarbetade för att mörda Lord Sebastian. Din uppgift är att skydda Arabella från misstankar och vilseleda utredningen.",
+    secret: "DU ÄR MÖRDAREN. Du är skyldig för mordet men Dr.Arabella är din medhjälpare! Ni älskar varandra och båda visste att Sebastian hotade hennes blueprints. Dr. Arabella gav medvetet den förgiftade flaskan till Sebastian efter att du förgiftat den tillsammans. Ni skyddar varandra.",
+    secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst. Sågs argumentera hetsigt med Lord Sebastian tidigare under kvällen. Verkar ovanligt beskyddande av Dr. Arabella - de är hemliga älskare och medkonspiratörer.",
+    murdererMotive: "Lord Sebastian skulle stjäla Arabellas blueprints (din älskares livsverk) OCH du var skyldig han massa pengar du inte har. Du köpte giftet från Professor Thornbury och du förgiftade whiskyflaskan. Arabella gav sedan flaskan till Sebastian. Ni är partners i brott.",
     characterCard: {
-      quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel",
-      relationToVictim: "Spelade regelbundet poker med Lord - förlorade enorma summor. Är skyldig Sebastian en spelskuld som han inte kan betala.",
+      quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel, bär dyra silverманчетtknappar med familjemonogram trots ekonomiska problem",
+      relationToVictim: "Spelade regelbundet poker med Lord - förlorade enorma summor. Är skyldig Sebastian en enorm spelskuld som han inte kan betala.",
       skills: "Läser kroppsspråk perfekt, mästare på att ljuga övertygande, expert på att vilseleda",
-      weakness: "Spelberoende - kan inte motstå en satsning. Desperat pga sin ekonomiska situation. Måste skydda Dr. Arabella till varje pris."
+      weakness: "Spelberoende - kan inte motstå en satsning. Desperat pga sin ekonomiska situation. Måste skydda Dr. Arabella till varje pris - är djupt förälskad i henne."
     },
-    personalGoal: "Skydda Dr. Arabella från misstankar och se till att mordet inte spåras tillbaka till er. Vilseleda utredningen och anklaga andra om nödvändigt.",
+    personalGoal: "Skydda Dr. Arabella från anklagelser och se till att ni båda går fria. Peka misstankar mot andra. Endast om spelarna röstar ut DIG förlorar ni - om de röstar ut Arabella händer inget.",
     relationships: {
-      allies: [6], // dr arabella - din partner i brottet, måste skydda henne
-      rivals: [3], // lady margaret - hon ser igenom dina lögner och förakt för din 'oseriösitet'
+      allies: [6], // dr arabella - din hemliga älskare och partner i brott
+      rivals: [3], // lady margaret - hon ser igenom dina lögner
       secrets: [1] // du såg inspektören dricka i hemlighet
     },
     questionGuide: [
       "Skydda Dr. Arabella genom att avleda misstankar från henne",
-      "Utmana Lady Margaret om hennes 'perfekta' förflutna",
-      "Vilseleda genom att peka på andra karaktärers motiv och hemligheter"
+      "Peka subtilt mot Professor Thornburys toxikologiska kunskap",
+      "Vilseleda genom att peka på andra karaktärers motiv"
     ],
     roleplayTips: [
       "Blanda spelkort nervöst när du är stressad",
       "Berätta överdrivna historier om din 'rika' barndom",
-      "Kom alltid till Dr. Arabellas försvar när hon anklagas",
-      "Använd charm för att vilseleda och avleda misstankar"
+      "Kom ALLTID till Dr. Arabellas försvar - du älskar henne",
+      "Samordna diskret med Arabella - ni är partners"
     ]
   },
   {
@@ -120,16 +120,16 @@ export const personas = [
     profileImage: "/media/images/profiles/Professor.png",
     personality: "Akademisk och disträ.",
     background: "Undervisar vid Cambridge. Skriv banbrytande bok om mord.",
-    secret: "Lord Sebastian lurade honom på bokförlags-kontraktet och stal rättigheterna till hans forskning.",
-    secretClue: "Har en tjock anteckningsbok som skyddas nervöst. Har omfattande kunskap om gifter och toxikologi.",
-    murdererMotive: "Lord Sebastian bedrog dig på bokförlags-kontraktet och stal rättigheterna till dina livsverk. Din karriär och forskning förstördes.",
+    secret: "Lord Sebastian lurade dig på bokförlags-kontraktet. Du sålde det cyanid-derivat som användes i mordet till Victor von Sterling för 3 veckor sedan - du visste inte vad han skulle använda det till.",
+    secretClue: "Har en tjock anteckningsbok som skyddas nervöst. Har omfattande kunskap om gifter och toxikologi. Verkar nervös när man diskuterar cyanid-derivat.",
+    murdererMotive: "Lord Sebastian bedrog dig på bokförlags-kontraktet. Du sålde experimentella toxiner till Victor (som du trodde skulle användas för 'research'), men du anar nu att det kan ha använts i mordet.",
     characterCard: {
       quirks: "Glömmer namn, pratar om brottsfall vid middagen, bär alltid anteckningsbok",
       relationToVictim: "Lord Sebastian lurade dig på bokförlags-kontraktet och tog rättigheterna till din forskning",
-      skills: "Vet allt om mordmetoder, toxikologi och kriminalistik - särskilt gifter",
-      weakness: "Klumpig socialt, säger ofta för mycket. Bitter över det stulna kontraktet."
+      skills: "Vet allt om mordmetoder, toxikologi och keminaliexperts - särskilt cyanid-derivat. Har tillgång till experimentella gifter.",
+      weakness: "Klumpig socialt, säger ofta för mycket. Bitter över det stulna kontraktet. Rädd att hans giftförsäljning ska avslöjas."
     },
-    personalGoal: "Bevisa din expertis genom att lösa mordet - men samtidigt dölja din bitterhet och kunskap om gifter som kunde ha använts.",
+    personalGoal: "Bevisa din expertis genom att lösa mordet - men samtidigt dölja att du sålde det gift som användes. Du visste INTE att det skulle användas för mord.",
     relationships: {
       allies: [1], // inspektör blackwood - båda analytiska
       rivals: [6], // dr arabella - avundas hennes genuina genialitet
@@ -137,14 +137,14 @@ export const personas = [
     },
     questionGuide: [
       "Fråga Inspektören om spårbevis - jämför metoder",
-      "Analysera Dr. Arabellas kemiska kunskap - är den äkta eller stulen?",
-      "Diskutera toxikologi med Lady Margaret - hon verkar veta mer än hon borde"
+      "Analysera Dr. Arabellas kemiska kunskap men verka nervös",
+      "Undvik att diskutera var Victor kan ha fått tag på giftet"
     ],
     roleplayTips: [
       "Glöm bort folks namn mitt i samtal - 'Förlåt, vad var ditt namn igen?'",
       "Fördjupa dig i brottsdetaljerna på ett opassande sätt",
-      "Skydda din anteckningsbok - håll den tätt intill dig",
-      "Använd latin-termer och akademisk jargong när du blir nervös"
+      "Bli nervös när någon frågar om experimentella gifter",
+      "Skydda din anteckningsbok - den innehåller transaktioner"
     ]
   },
   {
@@ -192,31 +192,31 @@ export const personas = [
     profileImage: "/media/images/profiles/drarabella.png",
     personality: "Excentrisk och snabbpratande.",
     background: "Briljant uppfinnarinna med eget laboratorium i källaren.",
-    secret: "DU ÄR MÖRDAREN. Lord stal ritningarna till din uppfinning och du mördade honom med hjälp av Victor von Sterling.",
-    secretClue: "Har mekaniska verktyg och kemiska flaskor i väskan - vägrade visa innehållet när någon frågade. Victor verkar ovanligt beskyddande av dig.",
-    murdererMotive: "Lord stal ritningar och planerade patentera dem själv. Du mördade honom tillsammans med Victor von Sterling.",
+    secret: "DU ÄR MEDHJÄLPARE TILL MÖRDAREN. Du och Victor planerade mordet tillsammans. Victor köpte giftet från Professor Thornbury, ni förgiftade whiskyflaskan tillsammans, och du gav den medvetet till Sebastian. Ni älskar varandra och skyddar nu varandra. Om spelarna röstar ut dig händer inget - de måste rösta ut Victor för att vinna.",
+    secretClue: "Har mekaniska verktyg och kemiska flaskor i väskan. Victor verkar ovanligt beskyddande av dig - ni är hemliga älskare och medkonspiratörer. Du gav whiskyflaskan till Sebastian medvetet efter att ni förgiftat den tillsammans.",
+    murdererMotive: "Lord stal ritningar och planerade patentera dem själv. Du och Victor planerade mordet tillsammans - ni förgiftade whiskyflaskan och du gav den till Sebastian. Din kärlek till Victor och rädslan för att förlora ditt livsverk drev dig att hjälpa till med mordet.",
     characterCard: {
       quirks: "Reparerar saker mitt i samtal, ser mönster i allt, älskar klockor",
-      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - han stal dina ritningar",
-      skills: "Expert på kemi, mekanik och explosive ämnen - perfekt för att planera ett mord",
-      weakness: "Naiv när det gäller människor - litar för lätt. Blir nervös när anklagad direkt."
+      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - han stal dina ritningar och hotade patentera dem",
+      skills: "Expert på kemi, mekanik och explosive ämnen. Har eget labb i källarvalvet.",
+      weakness: "Naiv när det gäller människor - litar för lätt på Victor. Blir nervös när anklagad. Djupt kär i Victor och skulle göra vad som helst för honom."
     },
-    personalGoal: "Dölja att du är mördaren och se till att någon annan blir anklagad. Victor von Sterling är din medbrottsling och skyddar dig - lita på honom.",
+    personalGoal: "Skydda Victor från anklagelser och se till att ni båda går fria. Peka misstankar mot andra - särskilt Professor Thornbury som sålde giftet. Spelarna måste rösta ut Victor för att vinna - om de röstar ut dig händer inget.",
     relationships: {
-      allies: [2], // victor von sterling - din medbrottsling och beskyddare
+      allies: [2], // victor von sterling - din hemliga älskare och partner i brott
       rivals: [4], // professor thornbury - hans teoretiska kunskap vs din praktiska
       secrets: [7] // du vet att den mystiska främlingen har falskt namn
     },
     questionGuide: [
-      "Spela naiv och entusiastisk om brottet - visa 'nyfikenhet'",
-      "Låt Victor komma till ditt försvar när du anklagas",
-      "Anklaga andra subtilt genom att 'observera' tekniska detaljer"
+      "Försvara Victor aktivt när han anklagas - ni är partners",
+      "Peka subtilt mot Professor Thornbury som källa till giftet",
+      "Avleda misstankar från er båda genom att fokusera på andras motiv"
     ],
     roleplayTips: [
-      "Plocka med små mekaniska delar när du pratar för att verka distraherad",
-      "Bli plötsligt distraherad av klockor eller maskiner i rummet",
-      "Spela oskyldig och nyfiken - 'Hur kunde mördaren ha gjort det?'",
-      "Lita på Victor - han är där för att skydda dig"
+      "Plocka med små mekaniska delar när du pratar",
+      "Bli plötsligt distraherad av klockor eller maskiner",
+      "Samordna diskret med Victor - ni är partners i brott",
+      "Var beredd att ta skulden om nödvändigt - du vet att om de röstar ut dig så förlorar de inte"
     ]
   },
   {
