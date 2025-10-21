@@ -49,7 +49,7 @@ export const personas = [
     personality: "Charmig och optimistisk.",
     background: "Förlorade familjeförmögenheten men håller skenet uppe.",
     secret: "DU ÄR MÖRDAREN. Du är skyldig för mordet men Dr.Arabella är din medhjälpare! Ni älskar varandra och båda visste att Sebastian hotade hennes blueprints. Dr. Arabella gav medvetet den förgiftade flaskan till Sebastian efter att du förgiftat den tillsammans. Ni skyddar varandra.",
-    secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst. Sågs argumentera hetsigt med Lord Sebastian tidigare under kvällen. Verkar ovanligt beskyddande av Dr. Arabella - de är hemliga älskare och medkonspiratörer.",
+    secretClue: "Silvermanschettknappen i Sebastians ficka tillhör Victor. Röstinspelningen antydde att någon 'redan förlorat allt' - Victors enorma spelskuld. Dosen '17 droppar (3 msk)' avslöjar koden: 17 bokstäver i 'Victor von Sterling', 3 ord i namnet. Hans hetsiga argument med Sebastian tidigare gav motiv.",
     murdererMotive: "Lord Sebastian skulle stjäla Arabellas blueprints (din älskares livsverk) OCH du var skyldig han massa pengar du inte har. Du köpte sömnmedel från Professor Thornbury och du förgiftade whiskyflaskan med en dödlig dos sömnmedel. Arabella gav sedan flaskan till Sebastian. Ni är partners i brott.",
     characterCard: {
       quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel, bär dyra silvermanschettknappar med familjemonogram trots ekonomiska problem",

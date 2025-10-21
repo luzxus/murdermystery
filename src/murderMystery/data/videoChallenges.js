@@ -22,7 +22,7 @@ export const videoChallenges = [
     id: 'victor-sebastian-arguing',
     characterId: 2, // Victor von Sterling
     characterName: 'Victor von Sterling',
-    videoPath: '/media/videos/intrigues/victor_sebastian_argument.mp4',
+    videoPath: '/media/videos/intrigues/sebastian_confronts_victor.mp4.mp4',
     title: 'Spelskuldens Konfrontation',
     description: 'Victor och Lord Sebastian ses argumentera hetsigt. Diskussionen verkar handla om pengar...',
     challenge: {
@@ -54,9 +54,9 @@ export const videoChallenges = [
     id: 'victor-arabella-whiskey',
     characterId: 2, // Victor von Sterling (can also be 6 for Arabella)
     characterName: 'Victor von Sterling & Dr. Arabella',
-    videoPath: '/media/videos/intrigues/victor_arabella_whiskey.mp4',
+    videoPath: '/media/videos/victor_arabella_whiskey.mp4',
     title: 'Den Hemliga Gåvan',
-    description: 'Victor ger Arabella något diskret - en flaska. Vad innehåller den egentligen?',
+    description: 'Victor ger Arabella något diskret - en flaska.',
     challenge: {
       title: 'Gåvans Hemlighet',
       instructions: 'Victor eller Arabella måste ge en annan spelare en "gåva" (vilket föremål som helst från bordet) och övertyga dem om att ta emot den genom att hitta på en historia om varför gåvan är viktig (60 sekunder).',

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Skull } from 'lucide-react';
 import { MANOR_STILL } from '../constants';
 
-const MURDER_VIDEO_PATH = '/media/videos/arabella_sebastian_whiskey.mp4';
+const MURDER_VIDEO_PATH = '/media/videos/intrigues/ending_1.mp4';
 
 export function RevealScreen({ murderer, onRestart, didWin = true }) {
   const [showVideo, setShowVideo] = useState(false);
@@ -36,11 +36,15 @@ export function RevealScreen({ murderer, onRestart, didWin = true }) {
           <div className="bg-black/40 p-6 rounded-lg mb-8 text-left">
             <h3 className="text-xl font-bold text-white mb-3">Hela sanningen:</h3>
             <p className="text-gray-300">
-              Dr. Arabella Cogsworth och Victor von Sterling samarbetade för att utföra mordet.
-              Dr. Arabella framställde giftet med sin kunskap om cyanid och tillgång till kemikalier.
-              Victor hällde sedan det i whiskeyflaskan som Arabella överlämnade till Lord Sebastian.
+              Victor von Sterling led av sömnsvårigheter på grund av sina enorma spelskulder till Lord Sebastian. 
+              Han sökte hjälp hos Professor Thornbury, som ordinerade ett experimentellt sömnmedel (T-47). 
+              Professorn varnade att mer än 17 droppar blandat med alkohol var dödligt.
               <br /><br />
-              Vid 22:15 drack Lord Sebastian sin sista drink. Cyaniden verkade på sekunder.
+              Victor, som i grunden är en psykopat, fick en makaber idé. Han hällde den dödliga dosen i en whiskey-flaska 
+              och manipulerade Dr. Arabella Cogsworth att överlämna den till Lord Sebastian. Victor visste att Sebastian 
+              litade på och gillade Arabella, och att han aldrig skulle misstänka något.
+              <br /><br />
+              Vid 22:15 drack Lord Sebastian sin sista drink. Det dödliga sömnmedlet blandat med whiskey verkade på sekunder.
               <br /><br />
               <strong className="text-red-400">
                 Ledtråden som kunde avslöja: {murderer.secretClue}
