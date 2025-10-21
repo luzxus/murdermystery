@@ -55,7 +55,7 @@ export function ButlerTestimonyModal({ onClose, onVideoStateChange }) {
           "Jag måste ha den oavsett vad, även om det innebär att bedra någon jag älskar."
         </blockquote>
         <p className="text-gray-300 leading-relaxed">
-          Vad menade Sebastian? Vem var det han älskade? Butlern såg också Dr. Arabella och Victor von Sterling prata tyst i korridoren strax efter mordet - verkade de samordna sina berättelser?
+          Vad menade Sebastian? Vem var det han älskade?
         </p>
       </div>
           <div className="mt-4 flex justify-center">

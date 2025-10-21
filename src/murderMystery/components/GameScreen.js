@@ -39,7 +39,8 @@ export function GameScreen({
   observations,
   onVideoStateChange,
   interrogationsRemaining,
-  onOpenInterrogation
+  onOpenInterrogation,
+  phoneCallAnswered
 }) {
   const [showChallengeModal, setShowChallengeModal] = useState(false);
   const indexLabel = `${currentIndex + 1} / ${totalChallenges}`;
@@ -176,6 +177,7 @@ export function GameScreen({
             onCompleteVideoChallenge={onCompleteVideoChallenge}
             isVideoUnlocked={isVideoTabUnlocked}
             onVideoStateChange={onVideoStateChange}
+            phoneCallAnswered={phoneCallAnswered}
           />
         </div>
       </div>

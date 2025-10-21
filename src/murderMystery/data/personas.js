@@ -50,9 +50,9 @@ export const personas = [
     background: "Förlorade familjeförmögenheten men håller skenet uppe.",
     secret: "DU ÄR MÖRDAREN. Du är skyldig för mordet men Dr.Arabella är din medhjälpare! Ni älskar varandra och båda visste att Sebastian hotade hennes blueprints. Dr. Arabella gav medvetet den förgiftade flaskan till Sebastian efter att du förgiftat den tillsammans. Ni skyddar varandra.",
     secretClue: "Bär alltid spelkort i fickan - blandar dem nervöst. Sågs argumentera hetsigt med Lord Sebastian tidigare under kvällen. Verkar ovanligt beskyddande av Dr. Arabella - de är hemliga älskare och medkonspiratörer.",
-    murdererMotive: "Lord Sebastian skulle stjäla Arabellas blueprints (din älskares livsverk) OCH du var skyldig han massa pengar du inte har. Du köpte giftet från Professor Thornbury och du förgiftade whiskyflaskan. Arabella gav sedan flaskan till Sebastian. Ni är partners i brott.",
+    murdererMotive: "Lord Sebastian skulle stjäla Arabellas blueprints (din älskares livsverk) OCH du var skyldig han massa pengar du inte har. Du köpte sömnmedel från Professor Thornbury och du förgiftade whiskyflaskan med en dödlig dos sömnmedel. Arabella gav sedan flaskan till Sebastian. Ni är partners i brott.",
     characterCard: {
-      quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel, bär dyra silverманчетtknappar med familjemonogram trots ekonomiska problem",
+      quirks: "Berättar alltid historier från 'glansdagarna', fåfäng om sin klädsel, bär dyra silvermanschettknappar med familjemonogram trots ekonomiska problem",
       relationToVictim: "Spelade regelbundet poker med Lord - förlorade enorma summor. Är skyldig Sebastian en enorm spelskuld som han inte kan betala.",
       skills: "Läser kroppsspråk perfekt, mästare på att ljuga övertygande, expert på att vilseleda",
       weakness: "Spelberoende - kan inte motstå en satsning. Desperat pga sin ekonomiska situation. Måste skydda Dr. Arabella till varje pris - är djupt förälskad i henne."
@@ -194,11 +194,11 @@ export const personas = [
     background: "Briljant uppfinnarinna med eget laboratorium i källaren.",
     secret: "DU ÄR MEDHJÄLPARE TILL MÖRDAREN. Du och Victor planerade mordet tillsammans. Victor köpte giftet från Professor Thornbury, ni förgiftade whiskyflaskan tillsammans, och du gav den medvetet till Sebastian. Ni älskar varandra och skyddar nu varandra. Om spelarna röstar ut dig händer inget - de måste rösta ut Victor för att vinna.",
     secretClue: "Har mekaniska verktyg och kemiska flaskor i väskan. Victor verkar ovanligt beskyddande av dig - ni är hemliga älskare och medkonspiratörer. Du gav whiskyflaskan till Sebastian medvetet efter att ni förgiftat den tillsammans.",
-    murdererMotive: "Lord stal ritningar och planerade patentera dem själv. Du och Victor planerade mordet tillsammans - ni förgiftade whiskyflaskan och du gav den till Sebastian. Din kärlek till Victor och rädslan för att förlora ditt livsverk drev dig att hjälpa till med mordet.",
+    murdererMotive: "Lord stal ritningar och planerade patentera dem själv. Du berättade för Victor att Lord sebastian tänkte förråda dig. Victor förgiftade whiskyflaskan och du gav den till Sebastian. Din kärlek till Victor och rädslan för att förlora ditt livsverk drev dig att till med mordet.",
     characterCard: {
       quirks: "Reparerar saker mitt i samtal, ser mönster i allt, älskar klockor",
-      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - han stal dina ritningar och hotade patentera dem",
-      skills: "Expert på kemi, mekanik och explosive ämnen. Har eget labb i källarvalvet.",
+      relationToVictim: "Visade Lord din uppfinning för 2 månader sedan - du anar att han vill stjäla dina ritningar och patentera dem själv",
+      skills: "Expert på kemi, mekanik och explosiva ämnen.",
       weakness: "Naiv när det gäller människor - litar för lätt på Victor. Blir nervös när anklagad. Djupt kär i Victor och skulle göra vad som helst för honom."
     },
     personalGoal: "Skydda Victor från anklagelser och se till att ni båda går fria. Peka misstankar mot andra - särskilt Professor Thornbury som sålde giftet. Spelarna måste rösta ut Victor för att vinna - om de röstar ut dig händer inget.",
@@ -213,7 +213,7 @@ export const personas = [
       "Avleda misstankar från er båda genom att fokusera på andras motiv"
     ],
     roleplayTips: [
-      "Plocka med små mekaniska delar när du pratar",
+      "Prata gärna om teknik och teknologiska idéer mitt i samtal",
       "Bli plötsligt distraherad av klockor eller maskiner",
       "Samordna diskret med Victor - ni är partners i brott",
       "Var beredd att ta skulden om nödvändigt - du vet att om de röstar ut dig så förlorar de inte"

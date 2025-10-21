@@ -112,59 +112,74 @@ export function ChallengePanel({
   );
 }
 
-export function CluesList({ clues, unlockedClues, deepAnalyses = [], onAnalyzeClue = () => {}, lockedDeepHints = [] }) {
+export function CluesList({ clues, unlockedClues, deepAnalyses = [], onAnalyzeClue = () => {}, lockedDeepHints = [], phoneCallAnswered = false }) {
   return (
     <div>
       <h2 className="text-2xl font-bold text-white mb-4">Ledtrådar</h2>
       <div className="space-y-4">
-        {clues.map(clue => (
-          <div
-            key={clue.id}
-            className={`rounded-xl p-6 border ${
-              unlockedClues.includes(clue.id) ? 'bg-green-900/30 border-green-500/50' : 'bg-white/5 border-white/10'
-            }`}
-          >
-            <div className="flex justify-between mb-3">
-              <h3 className="font-bold text-white">{clue.title}</h3>
-              {unlockedClues.includes(clue.id) ? <Unlock className="w-5 h-5 text-green-400" /> : <Lock className="w-5 h-5 text-gray-400" />}
-            </div>
-            {unlockedClues.includes(clue.id) ? (
-              <>
-                <p className="text-gray-300 text-sm mb-3">{clue.description}</p>
-                {clue.unlock && (
-                  <div className="bg-black/40 p-3 rounded-lg mb-2">
-                    <p className="text-green-300 text-sm">{clue.unlock}</p>
-                  </div>
-                )}
-                {clue.deepHint && (
-                  <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700/40 text-purple-200 text-xs">
-                    {deepAnalyses.includes(clue.id) ? (
-                      <p className="italic">{clue.deepHint}</p>
-                    ) : lockedDeepHints.includes(clue.id) ? (
-                      <p className="italic text-red-300">Analysen permanent blockerad av tidigare konsekvens.</p>
-                    ) : (
-                      <div className="flex flex-col gap-2">
-                        <p className="italic opacity-80">Fördjupad analys möjlig – utlöst konsekvens är oförutsägbar.</p>
-                        <button
-                          onClick={() => onAnalyzeClue(clue.id)}
-                          className="self-start text-[11px] bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded font-semibold tracking-wide"
-                        >Analysera</button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="space-y-2">
-                <div className="h-4 w-3/4 bg-slate-600/30 rounded blur-[1px]" />
-                <div className="h-3 w-2/3 bg-slate-600/20 rounded blur-[1px]" />
-                <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500 flex items-center gap-1">
-                  <Lock className="w-3 h-3" /> Lås upp genom att lösa nästa utmaning
-                </p>
+        {clues.map(clue => {
+          // special handling for clue 4 (phone call)
+          const isPhoneClue = clue.id === 4;
+          const showPhoneContent = isPhoneClue && unlockedClues.includes(clue.id);
+          
+          return (
+            <div
+              key={clue.id}
+              className={`rounded-xl p-6 border ${
+                unlockedClues.includes(clue.id) ? 'bg-green-900/30 border-green-500/50' : 'bg-white/5 border-white/10'
+              }`}
+            >
+              <div className="flex justify-between mb-3">
+                <h3 className="font-bold text-white">{clue.title}</h3>
+                {unlockedClues.includes(clue.id) ? <Unlock className="w-5 h-5 text-green-400" /> : <Lock className="w-5 h-5 text-gray-400" />}
               </div>
-            )}
-          </div>
-        ))}
+              {unlockedClues.includes(clue.id) ? (
+                <>
+                  <p className="text-gray-300 text-sm mb-3">{clue.description}</p>
+                  {showPhoneContent ? (
+                    // phone call clue - show different content based on answer
+                    <div className="bg-black/40 p-3 rounded-lg mb-2">
+                      {phoneCallAnswered ? (
+                        <p className="text-green-300 text-sm">{clue.interaction?.onAnswerTranscript}</p>
+                      ) : (
+                        <p className="text-red-300 text-sm">{clue.interaction?.onDeclineText}</p>
+                      )}
+                    </div>
+                  ) : clue.unlock && (
+                    <div className="bg-black/40 p-3 rounded-lg mb-2">
+                      <p className="text-green-300 text-sm">{clue.unlock}</p>
+                    </div>
+                  )}
+                  {clue.deepHint && (
+                    <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700/40 text-purple-200 text-xs">
+                      {deepAnalyses.includes(clue.id) ? (
+                        <p className="italic">{clue.deepHint}</p>
+                      ) : lockedDeepHints.includes(clue.id) ? (
+                        <p className="italic text-red-300">Analysen permanent blockerad av tidigare konsekvens.</p>
+                      ) : (
+                        <div className="flex flex-col gap-2">
+                          <p className="italic opacity-80">Fördjupad analys möjlig – utlöst konsekvens är oförutsägbar.</p>
+                          <button
+                            onClick={() => onAnalyzeClue(clue.id)}
+                            className="self-start text-[11px] bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded font-semibold tracking-wide"
+                          >Analysera</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <div className="h-4 w-3/4 bg-slate-600/30 rounded blur-[1px]" />
+                  <div className="h-3 w-2/3 bg-slate-600/20 rounded blur-[1px]" />
+                  <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500 flex items-center gap-1">
+                    <Lock className="w-3 h-3" /> Lås upp genom att lösa nästa utmaning
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

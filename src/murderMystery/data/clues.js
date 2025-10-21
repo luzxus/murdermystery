@@ -45,13 +45,22 @@ export const clues = [
   {
     id: 4,
     phase: 'mid',
-    title: 'Hyllsektionen',
-    description: 'Endast en sektion oordnad: "Toxikologins Fundament", "Patenträtt 1900–1930", "Kinetiska Mekanismer", "Ekonomiska Oegentligheter i Industrin".',
-    unlock: '📚 Kombinationen av toxikologi + mekanik + patent antyder överlapp av kemisk och uppfinningsrelaterad agenda. Men "Ekonomiska Oegentligheter" sticker ut - ett kapitel om spelskulder har vikta hörn. Ett cirkulärt blekt avtryck på hyllkant (från cigarrett) visar att någon stod här länge och läste.',
-    tags: ['kemi', 'patent', 'mekanik', 'toxikologi', 'ekonomi', 'skuld', 'cigarr'],
-    misdirectionTags: ['professor', 'industri', 'juridik'],
-    suspicionWeight: { primary: 8, secondary: 4 },
-    unlockCondition: 'challenge_progress_>=4'
+    title: 'Röstinspelningen',
+    description: 'En telefon (ligger kvar på ett sidobord) börjar plötsligt ringa. Skärmen visar ingen kontakt – bara en anonym ikon.',
+    unlock: '☎️ Spelarna kan välja att "svara" eller ignorera. Om de svarar spelas ett förinspelat röstmeddelande upp: en dämpad viskning följt av ett kort hårt andetag. Rösten säger: "Du letar på fel hylla... doser avslöjas inte öppet. Fem är sömn. Sjutton är slutet. Och det var aldrig tänkt att nå tjugotre." Svag rasp av tyg mot trä i bakgrunden. Om de INTE svarar: de får ett kort med texten: "Ni missade ett anonymt samtal. Möjligen relevant för dos och tider."',
+    tags: ['telefon', 'röstinspelning', 'doser', 'anonym', 'ljud'],
+    misdirectionTags: ['professor', 'mystik', 'teknik'],
+    suspicionWeight: { primary: 7, secondary: 4 },
+    unlockCondition: 'challenge_progress_>=4',
+    media: {
+      video: '/media/videos/ringing_phone.mp4',
+      audio: '/media/voice/voice_threatening2.mp3'
+    },
+    interaction: {
+      type: 'call',
+      onAnswerTranscript: 'Han fick vad han förtjänade. Jag förlorade allt jag hade. och nu ville han förstöra fler liv. Sluta snoka runt annars ska ni få se...',
+      onDeclineText: 'Ni valde att inte svara. Möjligen förlorad pusselbit om dos och tid.'
+    }
   },
   {
     id: 5,

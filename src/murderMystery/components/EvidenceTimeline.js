@@ -25,7 +25,8 @@ export function EvidenceTimeline({
   videoChallenges = [],
   onCompleteVideoChallenge,
   isVideoUnlocked = false,
-  onVideoStateChange
+  onVideoStateChange,
+  phoneCallAnswered = false
 }) {
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'evidence', 'videos', 'observations'
 
@@ -157,6 +158,7 @@ export function EvidenceTimeline({
               return <ClueCard
                 key={item.id}
                 clue={item.data}
+                phoneCallAnswered={phoneCallAnswered}
               />;
             } else if (item.type === 'observation') {
               return <ObservationCard key={item.id} observation={item.data} />;
@@ -205,7 +207,9 @@ function TabButton({ active, onClick, icon, label, count, disabled }) {
   );
 }
 
-function ClueCard({ clue }) {
+function ClueCard({ clue, phoneCallAnswered }) {
+  const isPhoneClue = clue.id === 4;
+  
   return (
     <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border-2 border-green-500/30 rounded-xl p-5 shadow-lg hover:shadow-green-500/20 transition-all">
       {/* Header */}
@@ -245,11 +249,23 @@ function ClueCard({ clue }) {
       </div>
 
       {/* Initial Analysis */}
-      <div className="bg-green-950/40 border-l-4 border-green-500 p-3 mb-3 rounded">
-        <p className="text-green-200 text-sm leading-relaxed">
-          <strong className="text-green-400 flex items-center gap-1">
+      <div className={`${
+        isPhoneClue && !phoneCallAnswered 
+          ? 'bg-red-950/40 border-l-4 border-red-500'
+          : 'bg-green-950/40 border-l-4 border-green-500'
+      } p-3 mb-3 rounded`}>
+        <p className={`${
+          isPhoneClue && !phoneCallAnswered ? 'text-red-200' : 'text-green-200'
+        } text-sm leading-relaxed`}>
+          <strong className={`${
+            isPhoneClue && !phoneCallAnswered ? 'text-red-400' : 'text-green-400'
+          } flex items-center gap-1`}>
             <LockOpenIcon sx={{ fontSize: 16 }} /> Analys:
-          </strong> {clue.unlock}
+          </strong> {isPhoneClue && clue.interaction ? (
+            phoneCallAnswered 
+              ? clue.interaction.onAnswerTranscript 
+              : clue.interaction.onDeclineText
+          ) : clue.unlock}
         </p>
       </div>
     </div>

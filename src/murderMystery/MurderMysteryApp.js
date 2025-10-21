@@ -20,6 +20,7 @@ import { VideoUnlockModal } from './components/VideoUnlockModal';
 import { ButlerTestimonyModal } from './components/ButlerTestimonyModal';
 import { InterrogationModal } from './components/InterrogationModal';
 import { InterrogationResultModal } from './components/InterrogationResultModal';
+import { PhoneCallModal } from './components/PhoneCallModal';
 import { useRedHerrings } from './hooks/useRedHerrings';
 import { useConversationPrompts } from './hooks/useConversationPrompts';
 import { MusicPlayer } from './components/MusicPlayer';
@@ -55,6 +56,10 @@ export function MurderMysteryApp() {
   const [hasShownVideoUnlock, setHasShownVideoUnlock] = useState(false);
   const [showButlerTestimony, setShowButlerTestimony] = useState(false);
   const [isFinalVote, setIsFinalVote] = useState(false);
+  // Phone call modal (clue 4)
+  const [showPhoneCallModal, setShowPhoneCallModal] = useState(false);
+  const [hasShownPhoneCall, setHasShownPhoneCall] = useState(false);
+  const [phoneCallAnswered, setPhoneCallAnswered] = useState(false);
   // Interrogation system
   const [showInterrogationModal, setShowInterrogationModal] = useState(false);
   const [interrogationsUsed, setInterrogationsUsed] = useState(0);
@@ -343,6 +348,15 @@ export function MurderMysteryApp() {
     }
   }, [unlockedClues, hasShownVideoUnlock, screen]);
 
+  // Show phone call modal when clue 4 is unlocked
+  useEffect(() => {
+    const isPhoneCallUnlocked = unlockedClues.includes(4);
+    if (isPhoneCallUnlocked && !hasShownPhoneCall && screen === Screens.GAME) {
+      setShowPhoneCallModal(true);
+      setHasShownPhoneCall(true);
+    }
+  }, [unlockedClues, hasShownPhoneCall, screen]);
+
   // Whenever a new observation (possibly red herring) arrives, adjust suspicion for misleads
   useEffect(() => {
     if (!observations.length) return;
@@ -471,6 +485,7 @@ export function MurderMysteryApp() {
           onVideoStateChange={setIsVideoPlaying}
           interrogationsRemaining={MAX_INTERROGATIONS - interrogationsUsed}
           onOpenInterrogation={() => setShowInterrogationModal(true)}
+          phoneCallAnswered={phoneCallAnswered}
         />
         <div className="max-w-6xl mx-auto px-4 relative">
           {/* Conversation prompts layer */}
@@ -484,6 +499,20 @@ export function MurderMysteryApp() {
         {/* Video unlock modal */}
         {showVideoUnlockModal && (
           <VideoUnlockModal onClose={() => setShowVideoUnlockModal(false)} />
+        )}
+        {/* Phone call modal (clue 4) */}
+        {showPhoneCallModal && (
+          <PhoneCallModal
+            clue={clues.find(c => c.id === 4)}
+            onAnswer={() => {
+              setPhoneCallAnswered(true);
+              setShowPhoneCallModal(false);
+            }}
+            onDecline={() => {
+              setPhoneCallAnswered(false);
+              setShowPhoneCallModal(false);
+            }}
+          />
         )}
         {/* Butler testimony modal after final challenge */}
         {showButlerTestimony && (

@@ -30,7 +30,7 @@ export const challenges = [
     id: 3,
     title: "Undersök Professorns laboratorium",
     description: "En brännmärkt laboratoriejournal har hittats bland Professorns papper. Texten är delvis förstörd men några avgörande rader går att läsa.",
-    puzzle: "Journalen är svårt skadad av vätska och värme, men följande text kan urskiljas:\n\n'...Experiment T-47: Sömnmedel\nDos: 5 droppar för normal sömn\nOBS: 15 droppar+ DÖDLIGT vid alkohol\nLeveransdatum: [suddigt]\nBeställare: [bränt bort]'\n\nNär ni försöker läsa mer faller journalen isär i händerna på er.\n",
+    puzzle: "Journalen är svårt skadad av vätska och värme, men följande text kan urskiljas:\n\n'...Experiment T-47: Sömnmedel\nDos: 5 droppar för normal sömn\nOBS: 17 droppar (3ml) + DÖDLIGT vid alkohol\nLeveransdatum: [suddigt]\nBeställare: [bränt bort]'\n\nNär ni försöker läsa mer faller journalen isär i händerna på er.\n",
     hint: "Fundera på doseringen och kopplingen till romerska siffror. Vad är den dödliga dosen och hur skrivs den med romerska siffror?",
     answer: "XVII",
     acceptedAnswers: ["XVII", "xvii", "17 med romerska siffror"],
