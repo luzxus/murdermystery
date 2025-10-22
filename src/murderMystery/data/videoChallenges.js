@@ -22,7 +22,7 @@ export const videoChallenges = [
     id: 'victor-sebastian-arguing',
     characterId: 2, // Victor von Sterling
     characterName: 'Victor von Sterling',
-    videoPath: '/media/videos/intrigues/sebastian_confronts_victor.mp4.mp4',
+    videoPath: '/media/videos/intrigues/sebastian_confronts_victor.mp4',
     title: 'Spelskuldens Konfrontation',
     description: 'Victor och Lord Sebastian ses argumentera hetsigt. Diskussionen verkar handla om pengar...',
     challenge: {
