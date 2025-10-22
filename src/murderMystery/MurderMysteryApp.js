@@ -377,8 +377,10 @@ export function MurderMysteryApp() {
   }, []);
 
   // Render
+  let screenContent;
+
   if (screen === Screens.SETUP) {
-    return (
+    screenContent = (
       <>
         <SetupScreen
           playerCount={playerCount}
@@ -391,46 +393,34 @@ export function MurderMysteryApp() {
         {showCharacterCards && (
           <CharacterCardsModal personas={personas} onClose={() => setShowCharacterCards(false)} />
         )}
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.DICE_ROLL) {
-    return (
+  } else if (screen === Screens.DICE_ROLL) {
+    screenContent = (
       <>
         <DiceRollScreen
           selectedPlayers={selectedPlayers}
           onContinue={() => setScreen(Screens.MURDER_SEQUENCE)}
         />
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.MURDER_SEQUENCE) {
-    return (
+  } else if (screen === Screens.MURDER_SEQUENCE) {
+    screenContent = (
       <>
         <MurderSequence
           onComplete={() => setScreen(Screens.INTRO)}
           onVideoStateChange={setIsVideoPlaying}
         />
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.INTRO) {
-    return (
+  } else if (screen === Screens.INTRO) {
+    screenContent = (
       <>
         <IntroScreen onStartGame={() => setScreen(Screens.GAME)} />
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.SECRETS || showSecretsRound) {
-    return (
+  } else if (screen === Screens.SECRETS || showSecretsRound) {
+    screenContent = (
       <>
         <AccusationScreen
           selectedPlayers={selectedPlayers}
@@ -442,13 +432,10 @@ export function MurderMysteryApp() {
             startVoting();
           }}
         />
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.GAME) {
-    return (
+  } else if (screen === Screens.GAME) {
+    screenContent = (
       <>
         <GameScreen
           challenge={challenges[currentChallenge]}
@@ -540,22 +527,22 @@ export function MurderMysteryApp() {
             onClose={() => setInterrogationResult(null)}
           />
         )}
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
-  }
-
-  if (screen === Screens.REVEAL) {
-    return (
+  } else if (screen === Screens.REVEAL) {
+    screenContent = (
       <>
         <RevealScreen murderer={murderer} onRestart={restart} />
-        <MusicPlayer isVideoPlaying={isVideoPlaying} />
       </>
     );
+  } else {
+    screenContent = null;
   }
+
 
   return (
     <>
+      {screenContent}
       <MusicPlayer isVideoPlaying={isVideoPlaying} />
     </>
   );
